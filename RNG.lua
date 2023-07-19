@@ -81,7 +81,19 @@ local sets = {
 		Main = 'Fire Staff',
 	},
 	
+	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
+		-- Main = 'Dark staff',
+		-- Sub = '';
+	},
+	
 --Ammos to cycle through
+	Ammo_Ws = {
+		Ammo = 'Darksteel Bolt'
+	},
+	Ammo_Unlimited = {	--Used for regular shots and Weaponskills if Unlimited Shot is active.
+		Ammo = 'Darksteel Bolt' --Irn.Msk. Bolt
+	},
+
 	--Crossbow
 	Ammo_Default = {-- Put your default crossbow ammo here. Or leave it blank to allow manual ammo changing while on default mode.
 		--Ammo = 'Crossbow Bolt'
@@ -104,13 +116,7 @@ local sets = {
 	Ammo_Darksteel = {
 		Ammo = 'Darksteel Bolt'
 	},
-	Ammo_Ws = {
-		Ammo = 'Darksteel Bolt'
-	},
-	Ammo_Unlimited = {	--Used for regular shots and Weaponskills if Unlimited Shot is active.
-		Ammo = 'Darksteel Bolt' --Irn.Msk. Bolt
-	},
-	
+
 	--Bow
 	Ammo_Arrow = {
 		--Ammo = 'Wooden Arrow'
@@ -130,11 +136,6 @@ local sets = {
 	Ammo_NoRanged = {
 		-- Range = '',
 		-- Ammo = 'Bomb Core',
-	},
-	
-	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
-		-- Main = 'Dark staff',
-		-- Sub = '';
 	},
 
 --Idle sets
@@ -229,6 +230,9 @@ local sets = {
         Legs = 'Hunter\'s Braccae',
         Feet = 'Hunter\'s Socks',
 		},
+    Sharpshot = {--Used while TpSet is in 'Acc' and Sharpshot is active.
+		Legs = 'Hunter\'s Braccae', --R.Acc +10
+	},
 	
 --Weaponskill sets
     Ws_Default = {
@@ -261,8 +265,15 @@ local sets = {
 	},
 	
 --Ability sets
-    Scavenge = {},
-    Sharpshot = {},
+    Scavenge = {
+		Feet = 'Hunter\'s Socks',
+	},
+	Shadowbind = {
+		Hands = 'Hunter\'s Bracers',
+	},
+	Camouflage = {--Used on activation only
+		Body = 'Hunter\'s Jerkin',
+	},
 	
 --Other sets
     TH = {},
@@ -297,23 +308,6 @@ local sets = {
         -- Legs = 'Remove',
         -- Feet = 'Remove',
 	},
-    ['export'] = {
-        Main = 'Apollo\'s Staff',
-        Range = 'Othinus\' Bow',
-        Ammo = 'Darksteel Bolt',
-        Head = 'Optical Hat',
-        Neck = 'Ranger\'s Necklace',
-        Ear1 = 'Drone Earring',
-        Ear2 = 'Drone Earring',
-        Body = 'Hunter\'s Jerkin',
-        Hands = 'Seiryu\'s Kote',
-        Ring1 = 'Coral Ring',
-        Ring2 = 'Merman\'s Ring',
-        Back = 'Amemet Mantle +1',
-        Waist = 'Ryl.Kgt. Belt',
-        Legs = 'Hunter\'s Braccae',
-        Feet = 'Hunter\'s Socks',
-    },
 };
 profile.Sets = sets;
 
@@ -563,6 +557,10 @@ profile.HandleAbility = function()
     else
 		if string.match(ability.Name, 'Scavenge') then 
 			gFunc.EquipSet(sets.Scavenge);
+		elseif string.match(ability.Name, 'Shadowbind') then 
+			gFunc.EquipSet(sets.Shadowbind) 
+		elseif string.match(ability.Name, 'Camouflage') then 
+			gFunc.EquipSet(sets.Camouflage) 
 		elseif string.match(ability.Name, 'Sharpshot') then 
 			gFunc.EquipSet(sets.Sharpshot) 
 		end
@@ -653,10 +651,14 @@ end
 
 profile.HandleMidshot = function()
     local barrage = gData.GetBuffCount('Barrage');
+	local sharpshot = gData.GetBuffCount('Sharpshot');
     gFunc.EquipSet(sets.Midshot);
 	
 	if (blinclude.GetCycle('TpSet') == 'Acc') then
 		gFunc.EquipSet(sets.Midshot_Acc);
+		is (sharpshot > 0) then
+			gFunc.EquipSet(sets.sharpshot);
+		end
 	end
 
     if barrage > 0 then --ensure acc as base if barrage up
