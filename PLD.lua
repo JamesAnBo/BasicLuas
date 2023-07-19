@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.1
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 	
 	18.1	-Added Parade Gorget equip when HPP >= 85%
@@ -99,6 +99,7 @@ local sets = {
 --Engaged sets
     Dt = {},
     Tp_Default = {},
+	Tp_Acc = {},
 
 --These will overwrite any above TP profile.Sets if /tankset is used
     Tank_Main = {},--Default Tanking,  dt 
@@ -133,6 +134,7 @@ local sets = {
 
 --Weaponskill sets
     Ws_Default = {}, --Spirits Within will not change gear.
+	Ws_Acc = {},
     Savage_Blade = {},
 	Swift_Blade = {},
 	Vorpal_Blade = {},
@@ -308,6 +310,11 @@ profile.HandleDefault = function()
 
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default)
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -505,6 +512,10 @@ profile.HandleWeaponskill = function()
         
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
 
 		if string.match(ws.Name, 'Savage Blade') then
             gFunc.EquipSet(sets.Savage_Blade)

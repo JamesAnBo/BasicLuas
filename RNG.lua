@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -14,7 +14,7 @@ local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 	--DO NOT CHANGE 'Default'
 	--if 'One' is changed to 'Dagger'
 	--then Weapon_One must be changed to Weapon_Dagger
-blinclude.CreateCycle('Weapon', {[1] = 'Default', [2] = 'One', [3] = 'Two'});
+blinclude.CreateCycle('Weapon', {[1] = 'Default', [2] = 'Apollo', [3] = 'Fransisca', [4] = 'Fire'});
 
 --[[
 
@@ -71,12 +71,14 @@ local sets = {
 	}; 
 	
 --Weapons to cycle through
-	Weapon_One = {
-		Main = 'Oak Staff',
+	Weapon_Apollo = {
+		Main = 'Apollo\'s Staff',
 	},
-	Weapon_Two = {
-		Main = 'Bronze Axe',
-		Sub = 'Maple Shield'
+	Weapon_Fransisca = {
+		Main = 'Fransisca',
+	},
+	Weapon_Fire = {
+		Main = 'Fire Staff',
 	},
 	
 --Ammos to cycle through
@@ -99,6 +101,12 @@ local sets = {
 	Ammo_Holy = {
 		Ammo = 'Holy Bolt'
 	},
+	Ammo_Darksteel = {
+		Ammo = 'Darksteel Bolt'
+	},
+	Ammo_Unlimited = {
+		Ammo = 'Darksteel Bolt' --Irn.Msk. Bolt
+	},
 	
 	--Bow
 	Ammo_Arrow = {
@@ -107,7 +115,7 @@ local sets = {
 		
 	--Gun
 	Ammo_Bullet = {
-		--Ammo = 'Bronze Bullet'
+		--Ammo = 'Silver Bullet'
 	},
 	
 	--Cannon
@@ -128,7 +136,20 @@ local sets = {
 
 --Idle sets
 	
-    Idle_Default = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
+    Idle_Default = {
+	    Head = 'Optical Hat',
+        Neck = 'Faith Torque',
+        Ear1 = 'Drone Earring',
+        Ear2 = 'Drone Earring',
+        Body = 'Kirin\'s Osode',
+        Hands = 'Seiryu\'s Kote',
+        Ring1 = 'Tamas Ring',
+        Ring2 = 'Merman\'s Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Ryl.Kgt. Belt',
+        Legs = 'Hunter\'s Braccae',
+        Feet = 'Suzaku\'s Sune-Ate',
+		--If you want to idle with a weapon, put the weapon in Weapon_Default above.
 	},
     Resting = { --If you use a weapon for resting, put the weapon in Weapon_Resting.
 	},
@@ -141,7 +162,21 @@ local sets = {
     Dt = {},
 
 --Engaged sets
-    Tp_Default = {},
+    Tp_Default = {
+	    Head = 'Optical Hat',
+        Neck = 'Faith Torque',
+        Ear1 = 'Drone Earring',
+        Ear2 = 'Drone Earring',
+        Body = 'Kirin\'s Osode',
+        Hands = 'Seiryu\'s Kote',
+        Ring1 = 'Tamas Ring',
+        Ring2 = 'Merman\'s Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Ryl.Kgt. Belt',
+        Legs = 'Hunter\'s Braccae',
+        Feet = 'Suzaku\'s Sune-Ate',
+		},
+	Tp_Acc = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -163,10 +198,51 @@ local sets = {
     Preshot_FlurryI = {},
 	Preshot_FlurryII = {},
     Midshot = {},
-	Barrage = {},
+	Midshot_Acc = {        
+		Head = 'Optical Hat',
+        Neck = 'Ranger\'s Necklace',
+        Ear1 = 'Drone Earring',
+        Ear2 = 'Drone Earring',
+        Body = 'Hunter\'s Jerkin',
+        Hands = 'Seiryu\'s Kote',
+        Ring1 = 'Coral Ring',
+        Ring2 = 'Merman\'s Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Ryl.Kgt. Belt',
+        Legs = 'Hunter\'s Braccae',
+        Feet = 'Hunter\'s Socks',
+		},
+	Barrage = {
+        Head = 'Optical Hat',
+        Neck = 'Ranger\'s Necklace',
+        Ear1 = 'Drone Earring',
+        Ear2 = 'Drone Earring',
+        Body = 'Hunter\'s Jerkin',
+        Hands = 'Seiryu\'s Kote',
+        Ring1 = 'Coral Ring',
+        Ring2 = 'Merman\'s Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Ryl.Kgt. Belt',
+        Legs = 'Hunter\'s Braccae',
+        Feet = 'Hunter\'s Socks',
+		},
 	
 --Weaponskill sets
-    Ws_Default = {},
+    Ws_Default = {
+        Head = 'Wyvern Helm',
+        Neck = 'Faith Torque',
+        Ear1 = 'Drone Earring',
+        Ear2 = 'Drone Earring',
+        Body = 'Kirin\'s Osode',
+        Hands = 'Seiryu\'s Kote',
+        Ring1 = 'Coral Ring',
+        Ring2 = 'Merman\'s Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Ryl.Kgt. Belt',
+        Legs = 'Hunter\'s Braccae',
+        Feet = 'Hunter\'s Socks',
+		},
+	Ws_Acc = {},
 	Hot_Shot = {},
     Slug_Shot = {--AGI:70% (STR>AGI) 1-hit Acc Light/Flame
 	},
@@ -218,12 +294,28 @@ local sets = {
         -- Legs = 'Remove',
         -- Feet = 'Remove',
 	},
+    ['export'] = {
+        Main = 'Apollo\'s Staff',
+        Range = 'Othinus\' Bow',
+        Ammo = 'Darksteel Bolt',
+        Head = 'Optical Hat',
+        Neck = 'Ranger\'s Necklace',
+        Ear1 = 'Drone Earring',
+        Ear2 = 'Drone Earring',
+        Body = 'Hunter\'s Jerkin',
+        Hands = 'Seiryu\'s Kote',
+        Ring1 = 'Coral Ring',
+        Ring2 = 'Merman\'s Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Ryl.Kgt. Belt',
+        Legs = 'Hunter\'s Braccae',
+        Feet = 'Hunter\'s Socks',
+    },
 };
 profile.Sets = sets;
 
 local Settings = {
-	Default_Ranged_Type = 'Bow', -- 'Xbow', 'Bow', or 'Gun'. Use /rtype to cycle.
-	
+
 	--[[
 	Fast Cast I (RDM15) = 10%
 	Fast Cast II (RDM35) = 15%
@@ -233,12 +325,12 @@ local Settings = {
 	Snapshot = (0 + 0); -- Your total Snapshot (Traits + Gear in preshot)
 	
 	Lockstyle = true; -- set to true for lockstyle on load/sj change. Otherwise set to false.
-	LockstyleSet = 0; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
+	LockstyleSet = 2; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
 	
 	Macros = true; -- set to true for macro book and macro set changes on load/sj change.
-	MacroBook = 11; -- The macro book you want for this job. Otherwise set to false.
+	MacroBook = 2; -- The macro book you want for this job. Otherwise set to false.
 	MacroSets = { --  ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
-		[1] = 2, --WAR
+		[1] = 0, --WAR
 		[2] = 0, --MNK
 		[3] = 0, --WHM
 		[4] = 0, --BLM
@@ -249,8 +341,8 @@ local Settings = {
 		[9] = 0, --BST
 		[10] = 0, --BRD
 		[11] = 0, --RNG
-		[12] = 3, --SAM
-		[13] = 1, --NIN
+		[12] = 0, --SAM
+		[13] = 0, --NIN
 		[14] = 0, --DRG
 		[15] = 0, --SMN
 	};
@@ -259,6 +351,21 @@ local Settings = {
 };
 
 profile.Packer = {};
+
+function CheckAmmo()
+	local ammo = gData.GetEquipment().Ammo;
+	local setammo = sets['Ammo_'..blinclude.GetCycle('Ammo')].Ammo;
+	
+	if (blinclude.GetCycle('Ammo') ~= 'Default') then
+		if (ammo ~= nil) then
+			if (ammo.Name ~= setammo) then
+				print(chat.header('BasicLuas'):append(chat.warning('WARNING: Ammo Equipped: ['..ammo.Name..'] // Ammo Mode: ['..blinclude.GetCycle('Ammo')..']')));
+			end
+		else
+			print(chat.header('BasicLuas'):append(chat.warning('WARNING: No ammo equipped')));
+		end
+	end
+end
 
 function SetMacros()
 	if (Settings.Macros == true) then
@@ -311,7 +418,7 @@ function CreateAmmoCycle()
 	if (GetRangedType() ~= 'crossbow') then
 		blinclude.CreateCycle('Ammo', {});
 	else
-		blinclude.CreateCycle('Ammo', {[1] = 'Default', [2] = 'Acid', [3] = 'Bloody', [4] = 'Sleep', [5] = 'Blind', [6] = 'Holy'});
+		blinclude.CreateCycle('Ammo', {[1] = 'Default', [2] = 'Acid', [3] = 'Bloody', [4] = 'Sleep', [5] = 'Blind', [6] = 'Holy', [7] = 'Darksteel'});
 	end
 end
 
@@ -388,6 +495,10 @@ profile.HandleDefault = function()
 	
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default)
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
@@ -495,12 +606,14 @@ profile.HandlePreshot = function()
     local flurryI = gData.GetBuffCount(265);
     local flurryII = gData.GetBuffCount(581);
 	local unlimitedshot = gData.GetBuffCount('Unlimited Shot');
+	local barrage = gData.GetBuffCount('Barrage');
 	local ammo = gData.GetEquipment().Ammo;
 	
 	
 	if (ammo ~= nil) and (unlimitedshot <= 0) and (LimitedAmmo:contains(ammo.Name)) then
 		print(chat.header('BasicLuas'):append(chat.warning(ammo.Name..' is equipped without Unlimited shot. Canceled shot.')));
 		gFunc.CancelAction();
+		
 	else
 		local id, cnt = get_equipped_item(3);
 		if (id ~= nil and cnt ~= nil and GetRangedType()) then
@@ -508,8 +621,20 @@ profile.HandlePreshot = function()
 				print(chat.header('BasicLuas'):append(chat.warning('WARNING: '..ammo.Name..' is low. '..tostring(cnt)..' left.')));
 			end
 		end
+		
+		CheckAmmo();
+		
 		gFunc.EquipSet(sets.Preshot);
-
+		
+		
+		if (unlimitedshot > 0) then
+			gFunc.EquipSet(sets.Ammo_Unlimited);
+		end
+		
+		if (barrage > 0) then
+			gFunc.EquipSet(sets.Ammo_Darksteel);
+		end
+		
 		if flurryII > 0 then
 			gFunc.EquipSet(sets.Preshot_FlurryII);
 		elseif flurryI > 0 then
@@ -521,10 +646,16 @@ end
 profile.HandleMidshot = function()
     local barrage = gData.GetBuffCount('Barrage');
     gFunc.EquipSet(sets.Midshot);
+	
+	if (blinclude.GetCycle('TpSet') == 'Acc') then
+		gFunc.EquipSet(sets.Midshot_Acc);
+	end
 
-    if barrage > 0 then--ensure acc as base if barrage up
+    if barrage > 0 then --ensure acc as base if barrage up
+		gFunc.EquipSet(sets.Midshot_Acc);
         gFunc.EquipSet(sets.Barrage);
     end
+	
 	if (blinclude.GetCycle('TH') ~= 'none') then gFunc.EquipSet(sets.TH) end
 end
 
@@ -539,12 +670,23 @@ profile.HandleWeaponskill = function()
 		print(chat.header('BasicLuas'):append(chat.warning(ammo.Name..' is equipped without Unlimited shot. Canceled WS.')));
 		gFunc.CancelAction()
 		return;
+		
     elseif (canWS == false) then 
 		gFunc.CancelAction()
 		return;
 	else
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
         
+		if (unlimitedshot > 0) then
+			gFunc.EquipSet(sets.Ammo_Unlimited);
+		else
+			gFunc.EquipSet(sets.Ammo_Darksteel);
+		end
+		
         if string.match(ws.Name, 'Slug Shot') then
             gFunc.EquipSet(sets.Slug_Shot)
 		elseif string.match(ws.Name, 'Heavy Shot') then

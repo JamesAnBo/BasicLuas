@@ -1,7 +1,9 @@
---BasicLuas Ver. 18.0
+--BasicLuas Ver. 18.2
 --By Aesk (with much help from the Ashita discord members)
 
 local taggedMobs = T {};
+
+local isZoning  = false;
 
 local function ParseActionPacket(e)
     local bitData;
@@ -128,13 +130,26 @@ local function isTargetTagged()
 end
 
 ashita.events.register('packet_in', 'packet_in_th_cb', function(e)
-    if (e.id == 0x28) then
-        onAction(e);
-    elseif (e.id == 0x29) then
-        onMessage(e);
-    elseif (e.id == 0x0A or e.id == 0x0B) then
-        onZone(e);
+    -- Packet: Zone Leave
+    if (e.id == 0x0A or e.id == 0x0B) then
+		onZone(e);
+        isZoning = true;
+        return;
     end
+
+    -- Packet: Inventory Update Completed
+    if (e.id == 0x001D) then
+        isZoning = false;
+        return;
+    end
+	
+	if (isZoning) then
+		return;
+	elseif (e.id == 0x28) then
+			onAction(e);
+	elseif (e.id == 0x29) then
+			onMessage(e);
+	end
 end);
 
 return isTargetTagged;

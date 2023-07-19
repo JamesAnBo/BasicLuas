@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.1
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 	
 	18.1	-Removed GetRangedType(), Was redundent for BST
@@ -99,6 +99,7 @@ local sets = {
 	
 --Engaged sets
 	Tp_Default = {},
+	Tp_Acc = {},
 	Pet_Tp_Hybrid = {},
     Pet_Only_Tp = {},
 
@@ -122,6 +123,7 @@ local sets = {
 
 --Weaponskill sets
     Ws_Default = {},
+	Ws_Acc = {},
 	Ws_Default_SA = {},
 	Rampage = {--STR:50% 5-hit Crit Soil
 	},
@@ -344,6 +346,11 @@ profile.HandleDefault = function()
 	
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default)
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -519,6 +526,11 @@ profile.HandleWeaponskill = function()
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
         if (sa >= 1) then
             gFunc.EquipSet(sets.Ws_Default_SA);
         end

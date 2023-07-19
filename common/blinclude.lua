@@ -1,4 +1,4 @@
---BasicLuas Ver. 18.0
+--BasicLuas Ver. 18.2
 --By Aesk (with much help from the Ashita discord members)
 
 --[[
@@ -22,7 +22,7 @@ blsets = gFunc.LoadFile('common\\blsets.lua');
 obiLib = gFunc.LoadFile('common\\obis.lua');
 
 
-blinclude.AliasList = T{'blmessages','wsdistance','dt','th','kite','idleset','weapon','ammo','rangedtype','rtype','weaponlock','wlock','disable','modes','bldrain','nukeset','burst','elecycle','nuke','fight', 'sir','tankset','pupmode','tpgun','cormsg','forcestring','warpme','xpring','rrset','craftset','fishset','helmset','zeniset','showswaps','testcheck','highmp','bldebug','jacancel','jac'};
+blinclude.AliasList = T{'blmessages','wsdistance','dt','th','kite','tpset','idleset','weapon','ammo','weaponlock','wlock','disable','modes','bldrain','nukeset','burst','elecycle','nuke','fight', 'sir','tankset','pupmode','tpgun','cormsg','forcestring','warpme','xpring','rrset','craftset','fishset','helmset','zeniset','showswaps','testcheck','highmp','bldebug','jacancel','jac'};
 blinclude.Towns = T{'Tavnazian Safehold','Al Zahbi','Aht Urhgan Whitegate','Nashmau','Southern San d\'Oria [S]','Bastok Markets [S]','Windurst Waters [S]','San d\'Oria-Jeuno Airship','Bastok-Jeuno Airship','Windurst-Jeuno Airship','Kazham-Jeuno Airship','Southern San d\'Oria','Northern San d\'Oria','Port San d\'Oria','Chateau d\'Oraguille','Bastok Mines','Bastok Markets','Port Bastok','Metalworks','Windurst Waters','Windurst Walls','Port Windurst','Windurst Woods','Heavens Tower','Ru\'Lude Gardens','Upper Jeuno','Lower Jeuno','Port Jeuno','Rabao','Selbina','Mhaura','Kazham','Norg','Mog Garden','Celennia Memorial Library','Western Adoulin','Eastern Adoulin'};
 blinclude.LockingRings = T{'Echad Ring', 'Trizek Ring', 'Endorsement Ring', 'Return Ring', 'Homing Ring', 'Warp Ring','Facility Ring','Dim. Ring (Dem)','Dim. Ring (Mea)','Dim. Ring (Holla)','Altep Ring','Dem Ring','Holla Ring','Mea Ring','Vahzl Ring','Yhoat Ring'};
 blinclude.LockingWeapons = T{'Warp Cudgel', 'Treat Staff II', 'Trick Staff II'};
@@ -154,23 +154,22 @@ end
 function blinclude.GetModes()
 	local player = gData.GetPlayer();
 	if (player.MainJob == 'RDM') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [NukeSet: '..tostring(blinclude.GetCycle('NukeSet'))..'] [NukeMode: '..tostring(blinclude.GetToggle('Burst'))..'] [Fight: '..tostring(blinclude.GetToggle('Fight'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [NukeSet: '..tostring(blinclude.GetCycle('NukeSet'))..'] [NukeMode: '..tostring(blinclude.GetToggle('Burst'))..'] [Fight: '..tostring(blinclude.GetToggle('Fight'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	elseif (player.MainJob == 'BLM') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [NukeSet: '..tostring(blinclude.GetCycle('NukeSet'))..'] [NukeMode: '..tostring(blinclude.GetToggle('Burst'))..'] [Element: '..tostring(blinclude.GetCycle('Element'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [NukeSet: '..tostring(blinclude.GetCycle('NukeSet'))..'] [NukeMode: '..tostring(blinclude.GetToggle('Burst'))..'] [Element: '..tostring(blinclude.GetCycle('Element'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	elseif (player.MainJob == 'WHM') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Fight: '..tostring(blinclude.GetToggle('Fight'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [Fight: '..tostring(blinclude.GetToggle('Fight'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	elseif (player.MainJob == 'BRD') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [ForceString: '..tostring(blinclude.GetToggle('String'))..'] [Fight: '..tostring(blinclude.GetToggle('Fight'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [ForceString: '..tostring(blinclude.GetToggle('String'))..'] [Fight: '..tostring(blinclude.GetToggle('Fight'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	elseif (player.MainJob == 'PLD') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [TankSet: '..tostring(blinclude.GetCycle('TankSet'))..'] [SIR: '..tostring(blinclude.GetToggle('SIR'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [TankSet: '..tostring(blinclude.GetCycle('TankSet'))..'] [SIR: '..tostring(blinclude.GetToggle('SIR'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	elseif (player.MainJob == 'PUP') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [PupMode: '..tostring(blinclude.GetCycle('PupMode'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [PupMode: '..tostring(blinclude.GetCycle('PupMode'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	elseif (player.MainJob == 'COR') then
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [TPgun: '..tostring(blinclude.GetToggle('TPgun'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [TPgun: '..tostring(blinclude.GetToggle('TPgun'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	else
-		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
+		print(chat.header('BasicLuas'):append(chat.message('[Disabled: '..tostring(blinclude.GetToggle('Disabled'))..'] [WeaponLock: '..tostring(blinclude.GetToggle('WeaponLock'))..'] [Weapon: '..tostring(blinclude.GetCycle('Weapon'))..'] [IdleSet: '..tostring(blinclude.GetCycle('IdleSet'))..'] [Tpset: '..tostring(blinclude.GetCycle('TpSet'))..'] [TH: '..tostring(blinclude.GetCycle('TH'))..']')));
 	end
-	print(chat.header('BasicLuas'):append(chat.message('Press '..tostring(blkeybinds.GetTriggerKey('modes'))..' to see modes again.')))
 end
 
 
@@ -195,6 +194,7 @@ function blinclude.SetVariables()
 	blinclude.CreateToggle('DTset', false);
 	blinclude.CreateToggle('Kite', false);
 	blinclude.CreateToggle('Debug', false);
+	blinclude.CreateCycle('TpSet', {[1] = 'Default', [2] = 'Acc'});
 	blinclude.CreateCycle('IdleSet', {[1] = 'Default', [2] = 'Defense', [3] = 'Refresh', [4] = 'Regen'});
 	if (player.MainJob == 'RDM') or (player.MainJob == 'BLM') then
 		blinclude.CreateToggle('HighMP', false);
@@ -279,6 +279,16 @@ function blinclude.SetCommands(args)
 		blinclude.AdvanceToggle('DTset');
 		toggle = 'DT Set';
 		status = blinclude.GetToggle('DTset');
+    elseif (args[1] == 'tpset') then
+		if (#args > 1) then
+			blinclude.SetCycle('TpSet', args[2])
+			toggle = 'TP Set';
+			status = blinclude.GetCycle('TpSet');
+		else
+			blinclude.AdvanceCycle('TpSet');
+			toggle = 'TP Set';
+			status = blinclude.GetCycle('TpSet');
+		end
     elseif (args[1] == 'idleset') then
 		if (#args > 1) then
 			blinclude.SetCycle('IdleSet', args[2])
@@ -663,15 +673,14 @@ function blinclude.UseWarpItem()
 	elseif string.contains(blconfig.settings.Warp_Item, 'Warp Scroll') then
 		AshitaCore:GetChatManager():QueueCommand(1, '/item "Instant Warp Scroll" <me>');
 	end
-
+	
 	local function useitem()
 		local function forceidleset()
 			AshitaCore:GetChatManager():QueueCommand(1, '/lac set Idle_Default');
 		end
-		AshitaCore:GetChatManager():QueueCommand(1, '/item "' .. blconfig.settings.Warp_Item .. '" <me>');	
+		AshitaCore:GetChatManager():QueueCommand(1, '/item "' .. blconfig.settings.Warp_Item .. '" <me>');
 		forceidleset:once(30);
 	end
-	
 	useitem:once(33);
 end
 
@@ -758,6 +767,9 @@ function blinclude.NationAketon()
 	end
 end
 
+local function loadMsg()
+	print(chat.header('BasicLuas'):append(chat.message('Press '..tostring(blkeybinds.GetTriggerKey('modes'))..' to see modes again.')))
+end
 
 function blinclude.CheckDefault()
 	blinclude.SetRegenRefreshGear();
@@ -787,7 +799,7 @@ function blinclude.Initialize()
 	blinclude.SetAlias:once(2);
 	blkeybinds.SetKeybinds:once(2);
 	blinclude.GetModes:once(3)
-	
+	loadMsg:once(3)
 end
 
 return blinclude;

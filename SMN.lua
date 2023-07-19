@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -115,6 +115,7 @@ local sets = {
 	
 --Engaged sets
 	Tp_Default = {},
+	Tp_Acc = {},
 	Both_Engaged = {},
     Pet_Engaged = {},
 	Carby_Engaged = {
@@ -154,6 +155,7 @@ local sets = {
 
 --Weaponskill sets
 	Ws_Default = {},
+	Ws_Acc = {},
 
 --Summoning sets
     BP = {},
@@ -339,6 +341,11 @@ profile.HandleDefault = function()
 	
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default);
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -553,6 +560,11 @@ profile.HandleWeaponskill = function()
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
     end
 end
 

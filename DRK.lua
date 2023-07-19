@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -128,6 +128,7 @@ local sets = {
 	
 --Engaged sets
     Tp_Default = {},
+	Tp_Acc = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -167,6 +168,7 @@ local sets = {
 
 --Weaponskill sets
     Ws_Default = {},
+	Ws_Acc = {},
 	Ws_Default_SA = {},
 	Sickle_Moon ={--STR:40% AGI:40% 2-hit fTP: 1.50/2.00/2.75 Soil/Thunder
 	},
@@ -262,6 +264,21 @@ local Settings = {
 
 
 profile.Packer = {};
+
+function CheckAmmo()
+	local ammo = gData.GetEquipment().Ammo;
+	local setammo = sets['Ammo_'..blinclude.GetCycle('Ammo')].Ammo;
+	
+	if (blinclude.GetCycle('Ammo') ~= 'Default') then
+		if (ammo ~= nil) then
+			if (ammo.Name ~= setammo) then
+				print(chat.header('BasicLuas'):append(chat.warning('WARNING: Ammo Equipped: ['..ammo.Name..'] // Ammo Mode: ['..blinclude.GetCycle('Ammo')..']')));
+			end
+		else
+			print(chat.header('BasicLuas'):append(chat.warning('WARNING: No ammo equipped')));
+		end
+	end
+end
 
 function SetMacros()
 	if (Settings.Macros == true) then
@@ -385,6 +402,11 @@ profile.HandleDefault = function()
 	
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default)
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -530,6 +552,7 @@ profile.HandlePreshot = function()
 			end
 		end
 	end
+	CheckAmmo();
     gFunc.EquipSet(sets.Preshot);
 end
 
@@ -548,6 +571,11 @@ profile.HandleWeaponskill = function()
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
         if (sa >= 1) then
             gFunc.EquipSet(sets.Ws_Default_SA);
         end

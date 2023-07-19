@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -113,6 +113,7 @@ local sets = {
 --Engaged sets
     Dt = {},
     Tp_Default = {},
+	Tp_Acc = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -136,6 +137,7 @@ local sets = {
 	
 --Weaponskill sets
     Ws_Default = {},
+	Ws_Acc = {},
 	Ws_Hybrid = {},
 	Ei = {--STR:40% INT:40% Magical Shadow (Obi will equip if Dark weather/day)
 	},
@@ -328,6 +330,11 @@ profile.HandleDefault = function()
 	
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default);
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -485,7 +492,11 @@ profile.HandleWeaponskill = function()
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
-
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
 		if (hybrids:contains(ws.Name)) then
 			gFunc.EquipSet(sets.Ws_Hybrid)
 		elseif string.match(ws.Name, 'Blade: Ei') then

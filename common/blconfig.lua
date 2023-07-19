@@ -1,4 +1,4 @@
---BasicLuas Ver. 18.0
+--BasicLuas Ver. 18.2
 --By Aesk (with much help from the Ashita discord members)
 
 local blconfig = T{};

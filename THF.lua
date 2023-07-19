@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -162,6 +162,7 @@ local sets = {
 		Legs = 'Rogue\'s Culottes',
 		Feet = 'Rogue\'s Poulaines',
 	},
+	Tp_Acc = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -186,6 +187,7 @@ local sets = {
 		Hands = 'Hecatomb Mittens',
 		Feet = 'Hct. Leggings', 
 	},
+	Ws_Acc = {},
     Ws_Default_SA = {
 		Hands = 'Hecatomb Mittens',
 		Feet = 'Hct. Leggings', 
@@ -325,6 +327,21 @@ local Settings = {
 
 profile.Packer = {};
 
+function CheckAmmo()
+	local ammo = gData.GetEquipment().Ammo;
+	local setammo = sets['Ammo_'..blinclude.GetCycle('Ammo')].Ammo;
+	
+	if (blinclude.GetCycle('Ammo') ~= 'Default') then
+		if (ammo ~= nil) then
+			if (ammo.Name ~= setammo) then
+				print(chat.header('BasicLuas'):append(chat.warning('WARNING: Ammo Equipped: ['..ammo.Name..'] // Ammo Mode: ['..blinclude.GetCycle('Ammo')..']')));
+			end
+		else
+			print(chat.header('BasicLuas'):append(chat.warning('WARNING: No ammo equipped')));
+		end
+	end
+end
+
 function SetMacros()
 	if (Settings.Macros == true) then
 		if (Settings.MacroBook >= 1) and (Settings.MacroBook <= 20) then
@@ -451,6 +468,10 @@ profile.HandleDefault = function()
 
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default)
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
@@ -587,6 +608,7 @@ profile.HandlePreshot = function()
 			end
 		end
 	end
+	CheckAmmo();
     gFunc.EquipSet(sets.Preshot);
 end
 
@@ -605,6 +627,11 @@ profile.HandleWeaponskill = function()
         local ta = gData.GetBuffCount('Trick Attack');
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
         if (sa >= 1) and (ta >= 1) then
             gFunc.EquipSet(sets.Ws_Default_SATA);
         elseif (sa >= 1) then

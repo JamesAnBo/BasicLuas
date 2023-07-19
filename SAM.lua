@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -113,6 +113,7 @@ local sets = {
 	
 --Engaged sets
     Tp_Default = {},
+	Tp_Acc = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -134,6 +135,7 @@ local sets = {
 
 --Weaponskill sets
     Ws_Default = {},
+	Ws_Acc = {},
 	Ws_Default_SA = {},
 	Ws_Hybrid = {
 	},
@@ -330,6 +332,11 @@ profile.HandleDefault = function()
 
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default);
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
         if (hasso >= 1) then gFunc.EquipSet(sets.Hasso) end
         if (thirdeye >= 1) and (seigan >= 1) then 
             gFunc.EquipSet(sets.ThirdEye);
@@ -473,6 +480,11 @@ profile.HandleWeaponskill = function()
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
         if (sa >= 1) then
             gFunc.EquipSet(sets.Ws_Default_SA);
         end

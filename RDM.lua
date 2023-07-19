@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.1
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 
 	18.1	-Fixed Typo in Sets.Weapon_Resting
@@ -106,6 +106,7 @@ local sets = {
         Ring1 = 'Balance Ring',
         Ring2 = 'Balance Ring',
 	},
+	Tp_Acc = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -183,6 +184,7 @@ local sets = {
         Ring1 = 'Courage Ring',
         Ring2 = 'Balance Ring',
 	},
+	Ws_Acc = {},
 	Seraph_Blade = {},
 	Vorpal_Blade = {
 	},
@@ -350,6 +352,11 @@ profile.HandleDefault = function()
 	
     if (player.Status == 'Engaged') then
         gFunc.EquipSet(sets.Tp_Default)
+		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -573,6 +580,10 @@ profile.HandleWeaponskill = function()
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
 		
 		if string.match(ws.Name, 'Seraph Blade') then
 			gFunc.EquipSet(sets.Seraph_Blade)

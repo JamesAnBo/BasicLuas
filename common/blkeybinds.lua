@@ -1,4 +1,4 @@
---BasicLuas Ver. 18.0
+--BasicLuas Ver. 18.2
 --By Aesk (with much help from the Ashita discord members)
 
 local blkeybinds = T{};
@@ -9,6 +9,7 @@ local blkeybinds = T{};
 /dt				-Toggle damage taken set (fulltime)
 /th				-Toggle treasure hunter set (combines with TP set)
 /kite			-Equip movement set (fulltime)
+/tpset			-Cycles tp/ws sets
 /idleset		-Cycles idle sets
 /bldrain		-Cast your highest tier Drain spell
 /warpme			-Equip warp item (specified in blsettings.lua) and use it
@@ -45,19 +46,20 @@ local blkeybinds = T{};
 ]]--
 
 local binds = T{
-  ['^F8'] = 'fillmode',
-  ['^F9'] = 'dt',
-  ['^F10'] = 'th',
-  ['^F12'] = 'idleset',
-  ['@F12'] = 'warpme',
-  ['@C'] = 'craftset',
-  ['@F'] = 'fishset',
-  ['@H'] = 'helmset',
-  ['@X'] = 'xpring',
-  ['@D'] = 'disable',
-  ['@W'] = 'weapon',
-  ['@A'] = 'ammo',
-  ['F10'] = 'modes',
+	['^F8'] = 'fillmode',
+	['^F9'] = 'dt',
+	['^F10'] = 'th',
+	['!F12'] = 'tpset',
+	['^F12'] = 'idleset',
+	['@F12'] = 'warpme',
+	['@C'] = 'craftset',
+	['@F'] = 'fishset',
+	['@H'] = 'helmset',
+	['@X'] = 'xpring',
+	['@D'] = 'disable',
+	['@W'] = 'weapon',
+	['@A'] = 'ammo',
+	['F10'] = 'modes',
 };
 
 function blkeybinds.SetKeybinds()

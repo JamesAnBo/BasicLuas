@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.0
+	BasicLuas Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -79,7 +79,7 @@ local sets = {
 		Main = 'Skofnung',
 	},
 	Weapon_Axe_Priority = {
-		Main = {'Martial Axe','Tungi'},
+		Main = {'Maneater','Tungi'},
 		Sub = {'Joyeuse', 'Tungi','Viking Axe'}
 	},
 	
@@ -173,6 +173,9 @@ local sets = {
         Legs = { 'Byakko\'s Haidate', 'Fighter\'s Cuisses', 'Republic Subligar' },
         Feet = { 'Fighter\'s Calligae', 'Ctr. Greaves' },
     },
+	Tp_Acc_Priority = {
+		--Head = { 'Dream Hat +1' },
+	},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -213,8 +216,9 @@ local sets = {
         Back =  {'Amemet Mantle'},
         Waist = { 'Warwolf Belt', 'Life Belt' },
         Legs = {'Byakko\'s Haidate'},
-        Feet = {'Fighter\'s Calligae'},
+		Feet = 'Hct. Leggings',
 	},
+	Ws_Acc_Priority = {},
 	Ws_Default_SA_Priority = {
 		Body = 'Kirin\'s Osode',
 	},
@@ -225,32 +229,18 @@ local sets = {
 	Impulse_Drive_SA_Priority = {
         Head = 'Celata',
         Neck = 'Spike Necklace',
-        Ear1 = 'Bushinomimi',
-        Ear2 = 'Coral Earring',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
-        Ring1 = 'Rajas Ring',
         Ring2 = 'Courage Ring',
-        Back = 'Amemet Mantle',
-        Waist = 'Warwolf Belt',
-        Legs = 'Byakko\'s Haidate',
-        Feet = 'Fighter\'s Calligae',
 	},
 	Ground_Strike_Priority = {--STR:50% INT:50% 1-hit fTP 1.50/1.75/3.00 Breeze/Thunder/Aqua/Snow
 	},
 	Ground_Strike_SA_Priority = {
         Head = 'Celata',
         Neck = 'Spike Necklace',
-        Ear1 = 'Bushinomimi',
-        Ear2 = 'Coral Earring',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
-        Ring1 = 'Rajas Ring',
         Ring2 = 'Courage Ring',
-        Back = 'Amemet Mantle',
-        Waist = 'Warwolf Belt',
-        Legs = 'Byakko\'s Haidate',
-        Feet = 'Fighter\'s Calligae',
 	},
 	Smash_Axe_Priority = {},
 	Gale_Axe_Priority = {},
@@ -262,31 +252,15 @@ local sets = {
 	},
     Steel_Cyclone_Priority = {--STR:60% VIT60% 1-hit fTP: 1.50/1.75/3.00 Breeze/Aqua/Snow
         Head = 'Genbu\'s Kabuto',
-        Neck = 'Peacock Amulet',
-        Ear1 = 'Bushinomimi',
-        Ear2 = 'Coral Earring',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
-        Ring1 = 'Rajas Ring',
-        Ring2 = 'Sniper\'s Ring',
-        Back = 'Amemet Mantle',
-        Waist = 'Warwolf Belt',
-        Legs = 'Byakko\'s Haidate',
-        Feet = 'Fighter\'s Calligae',
     },
 	Steel_Cyclone_SA_Priority = {
         Head = 'Genbu\'s Kabuto',
         Neck = 'Spike Necklace',
-        Ear1 = 'Bushinomimi',
-        Ear2 = 'Coral Earring',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
-        Ring1 = 'Rajas Ring',
         Ring2 = 'Courage Ring',
-        Back = 'Amemet Mantle',
-        Waist = 'Warwolf Belt',
-        Legs = 'Byakko\'s Haidate',
-        Feet = 'Fighter\'s Calligae',
     },
 	
 --Ability Sets
@@ -307,7 +281,7 @@ local sets = {
 	
 --Other sets
     TH = {--/th will force this set to equip for 10 seconds
-		Head = 'Dream Hat +1',
+		--Head = 'Dream Hat +1',
 	},
     Movement = {},
 	
@@ -381,6 +355,21 @@ local Settings = {
 };
 
 profile.Packer = {};
+
+function CheckAmmo()
+	local ammo = gData.GetEquipment().Ammo;
+	local setammo = sets['Ammo_'..blinclude.GetCycle('Ammo')].Ammo;
+	
+	if (blinclude.GetCycle('Ammo') ~= 'Default') then
+		if (ammo ~= nil) then
+			if (ammo.Name ~= setammo) then
+				print(chat.header('BasicLuas'):append(chat.warning('WARNING: Ammo Equipped: ['..ammo.Name..'] // Ammo Mode: ['..blinclude.GetCycle('Ammo')..']')));
+			end
+		else
+			print(chat.header('BasicLuas'):append(chat.warning('WARNING: No ammo equipped')));
+		end
+	end
+end
 
 function SetMacros()
 	if (Settings.Macros == true) then
@@ -511,6 +500,10 @@ profile.HandleDefault = function()
 		
         gFunc.EquipSet(sets.Tp_Default)
 		
+		if blinclude.GetCycle('TpSet') == 'Acc' then
+			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -630,6 +623,7 @@ profile.HandlePreshot = function()
 			end
 		end
 	end
+	CheckAmmo();
 	gFunc.EquipSet(sets.Preshot);
 end
 
@@ -652,6 +646,11 @@ profile.HandleWeaponskill = function()
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		
         if (sa >= 1) then
             gFunc.EquipSet(sets.Ws_Default_SA);
         end

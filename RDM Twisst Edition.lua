@@ -1,5 +1,5 @@
 --[[
-	SPECIAL TWISST EDITION Ver. 18.1
+	SPECIAL TWISST EDITION Ver. 18.2
 	By Aesk (with much help from the Ashita discord members)
 	
 	DIRECT ALL QUESTIONS ON USAGE TO TWISST.
@@ -190,7 +190,7 @@ local sets = {
 		Ear1 = 'Bone earring +1',
 		Ear2 = 'Bone earring +1',
 	},
-	
+	Tp_Acc = {},
 	
 	Tp_HighMP = {
 		Head = 'Optical Hat',
@@ -204,6 +204,7 @@ local sets = {
 		Ear1 = 'Bone earring +1',
 		Ear2 = 'Bone earring +1',		
 	},
+	
 
 --Precast sets (Fast Cast + Casting time-%) 
 	--Put your total Fast Cast in the settings below.
@@ -487,6 +488,7 @@ local sets = {
 		Back = 'Amemet Mantle',	
 	},
 	
+	Ws_Acc = {},
 	
 	Seraph_Blade = {
 		Head = 'Optical Hat',
@@ -955,6 +957,11 @@ profile.HandleDefault = function()
 	else
 		if (player.Status == 'Engaged') then
 			gFunc.EquipSet(sets.Tp_Default)
+			
+			if blinclude.GetCycle('TpSet') == 'Acc' then
+				gFunc.EquipSet(sets.Tp_Acc)
+			end
+			
 			if (blinclude.GetCycle('TH') ~= 'none') then
 				if (blinclude.GetCycle('TH') == 'Tag') then 
 					if (not isTargetTagged()) then
@@ -1113,6 +1120,10 @@ profile.HandleWeaponskill = function()
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
+		
+		if (blinclude.GetCycle('TpSet') == 'Acc') then
+			gFunc.EquipSet(sets.Ws_Acc);
+		end
 		
 		if string.match(ws.Name, 'Seraph Blade') then
 			gFunc.EquipSet(sets.Seraph_Blade)
