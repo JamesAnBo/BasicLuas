@@ -463,6 +463,7 @@ end
 profile.HandleDefault = function()
 	blinclude.CheckLevelSync(profile.Sets);
 	UpdateSubJob()
+	local equip = gData.GetEquipment();
 	local player = gData.GetPlayer();
 		
 	if (player.Status ~= 'Resting') then
@@ -473,9 +474,7 @@ profile.HandleDefault = function()
 		end
 	end
 	
-	if not GetRangedType() then
-		gFunc.EquipSet(sets.Ammo_NoRanged);
-	elseif (GetRangedType() == 'crossbow') then
+	if (GetRangedType() == 'crossbow') then
 		if (blinclude.GetCycle('Ammo') == 'Unknown') or (blinclude.GetCycle('Ammo') == nil) then
 			CreateAmmoCycle();
 		elseif (blinclude.GetCycle('Ammo') ~= 'Default') then
@@ -492,6 +491,8 @@ profile.HandleDefault = function()
 	elseif (GetRangedType() == 'cannon') then
 		CreateAmmoCycle();
 		gFunc.EquipSet(sets.Ammo_Shell)
+	elseif (equip.Range == nil) then
+		gFunc.EquipSet(sets.Ammo_NoRanged);
 	else
 		CreateAmmoCycle();
 	end

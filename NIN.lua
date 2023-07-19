@@ -308,6 +308,7 @@ end
 profile.HandleDefault = function()
 	blinclude.CheckLevelSync(profile.Sets);
 	UpdateSubJob()
+	local equip = gData.GetEquipment();
 	local game = gData.GetEnvironment();
 	local player = gData.GetPlayer();
 		
@@ -319,12 +320,12 @@ profile.HandleDefault = function()
 		end
 	end
 	
-	if not GetRangedType() then
-		gFunc.EquipSet(sets.Ammo_NoRanged);
-	elseif (GetRangedType() == 'gun') then
+	if (GetRangedType() == 'gun') then
 			gFunc.EquipSet(sets.Ammo_Bullet)
 	elseif (GetRangedType() == 'bow') then
 			gFunc.EquipSet(sets.Ammo_Arrow)
+	elseif (equip.Range == nil) then
+		gFunc.EquipSet(sets.Ammo_NoRanged);
 	end
 
 	

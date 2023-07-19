@@ -479,9 +479,7 @@ profile.HandleDefault = function()
 		end
 	end
 	
-	if not GetRangedType() then
-		gFunc.EquipSet(sets.Ammo_NoRanged);
-	elseif (GetRangedType() == 'crossbow') then
+	if (GetRangedType() == 'crossbow') then
 		if (blinclude.GetCycle('Ammo') == 'Unknown') or (blinclude.GetCycle('Ammo') == nil) then
 			CreateAmmoCycle();
 		elseif (blinclude.GetCycle('Ammo') ~= 'Default') then
@@ -492,6 +490,8 @@ profile.HandleDefault = function()
 	elseif (GetRangedType() == 'bow') then
 		CreateAmmoCycle();
 		gFunc.EquipSet(sets.Ammo_Arrow)
+	elseif (equip.Range == nil) then
+		gFunc.EquipSet(sets.Ammo_NoRanged);
 	else
 		CreateAmmoCycle();
 	end

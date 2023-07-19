@@ -314,6 +314,7 @@ profile.HandleDefault = function()
     local hasso = gData.GetBuffCount('Hasso');
     local thirdeye = gData.GetBuffCount('Third Eye');
     local seigan = gData.GetBuffCount('Seigan');
+	local equip = gData.GetEquipment();
 	local player = gData.GetPlayer();
 	
 	if (player.Status ~= 'Resting') then
@@ -324,10 +325,10 @@ profile.HandleDefault = function()
 		end
 	end
 
-	if not GetRangedType() then
-		gFunc.EquipSet(sets.Ammo_NoRanged);
-	elseif (GetRangedType() == 'bow') then
+	if (GetRangedType() == 'bow') then
 		gFunc.EquipSet(sets.Ammo_Arrow)
+	elseif (equip.Range == nil) then
+		gFunc.EquipSet(sets.Ammo_NoRanged);
 	end
 
     if (player.Status == 'Engaged') then
