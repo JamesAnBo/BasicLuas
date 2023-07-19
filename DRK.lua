@@ -266,6 +266,10 @@ local Settings = {
 profile.Packer = {};
 
 function CheckAmmo()
+	if (blinclude.GetCycle('Ammo') == 'Unknown') or (blinclude.GetCycle('Ammo') == nil) then
+		return
+	end
+	
 	local ammo = gData.GetEquipment().Ammo;
 	local setammo = sets['Ammo_'..blinclude.GetCycle('Ammo')].Ammo;
 	

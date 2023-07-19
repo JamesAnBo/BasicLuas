@@ -357,6 +357,10 @@ local Settings = {
 profile.Packer = {};
 
 function CheckAmmo()
+	if (blinclude.GetCycle('Ammo') == 'Unknown') or (blinclude.GetCycle('Ammo') == nil) then
+		return
+	end
+	
 	local ammo = gData.GetEquipment().Ammo;
 	local setammo = sets['Ammo_'..blinclude.GetCycle('Ammo')].Ammo;
 	
@@ -419,10 +423,10 @@ function GetRangedType()
 end
 
 function CreateAmmoCycle()
-	if (GetRangedType() ~= 'crossbow') then
-		blinclude.CreateCycle('Ammo', {});
-	else
+	if (GetRangedType() == 'crossbow') then
 		blinclude.CreateCycle('Ammo', {[1] = 'Default', [2] = 'Acid', [3] = 'Bloody', [4] = 'Sleep', [5] = 'Blind', [6] = 'Holy'});
+	else
+		blinclude.CreateCycle('Ammo', {});
 	end
 end
 
