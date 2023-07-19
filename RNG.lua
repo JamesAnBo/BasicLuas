@@ -104,7 +104,10 @@ local sets = {
 	Ammo_Darksteel = {
 		Ammo = 'Darksteel Bolt'
 	},
-	Ammo_Unlimited = {
+	Ammo_Ws = {
+		Ammo = 'Darksteel Bolt'
+	},
+	Ammo_Unlimited = {	--Used for regular shots and Weaponskills if Unlimited Shot is active.
 		Ammo = 'Darksteel Bolt' --Irn.Msk. Bolt
 	},
 	
@@ -684,7 +687,7 @@ profile.HandleWeaponskill = function()
 		if (unlimitedshot > 0) then
 			gFunc.EquipSet(sets.Ammo_Unlimited);
 		else
-			gFunc.EquipSet(sets.Ammo_Darksteel);
+			gFunc.EquipSet(sets.Ammo_Ws);
 		end
 		
         if string.match(ws.Name, 'Slug Shot') then
