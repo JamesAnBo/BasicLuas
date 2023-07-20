@@ -15,7 +15,7 @@ local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 	--if 'One' is changed to 'Dagger'
 	--then Weapon_One must be changed to Weapon_Dagger
 blinclude.CreateCycle('Weapon', {[1] = 'Default', [2] = 'Apollo', [3] = 'Fransisca', [4] = 'Fire'});
-
+blinclude.CreateCycle('Ranged', {[1] = 'Default', [2] = 'Damage', [3] = 'Delay'});
 --[[
 
 Example_set = {
@@ -85,6 +85,16 @@ local sets = {
 		-- Main = 'Dark staff',
 		-- Sub = '';
 	},
+	
+--Ranged weapons to cycle through
+	Ranged_Default = {
+	};
+	Ranged_Damage = {
+		Range = 'Othinus\' Bow'
+	};
+	Ranged_Delay = {
+		Range = 'Machine Crossbow'
+	};
 	
 --Ammos to cycle through
 	Ammo_Ws = {
@@ -216,7 +226,7 @@ local sets = {
         Legs = 'Hunter\'s Braccae',
         Feet = 'Hunter\'s Socks',
 		},
-	Barrage = {
+	BarrageOn = { --Equipped during midshot when barrage active.
         Head = 'Optical Hat',
         Neck = 'Ranger\'s Necklace',
         Ear1 = 'Drone Earring',
@@ -230,9 +240,6 @@ local sets = {
         Legs = 'Hunter\'s Braccae',
         Feet = 'Hunter\'s Socks',
 		},
-    Sharpshot = {--Used while TpSet is in 'Acc' and Sharpshot is active.
-		Legs = 'Hunter\'s Braccae', --R.Acc +10
-	},
 	
 --Weaponskill sets
     Ws_Default = {
@@ -251,7 +258,7 @@ local sets = {
 		},
 	Ws_Acc = {},
 	Hot_Shot = {},
-    Slug_Shot = {--AGI:70% (STR>AGI) 1-hit Acc Light/Flame
+    Slug_Shot = {--AGI:70% (STR>AGI) 1-hit Acc Light/Aqua/Breeze
 	},
 	Heavy_Shot = {--AGI:70% 1-hit Crit Light/Flame
 	},
@@ -265,14 +272,20 @@ local sets = {
 	},
 	
 --Ability sets
+	--Equipped for activation only
+	Sharpshot = {
+		Legs = 'Hunter\'s Braccae', --R.Acc +10
+	},
     Scavenge = {
 		Feet = 'Hunter\'s Socks',
 	},
 	Shadowbind = {
 		Hands = 'Hunter\'s Bracers',
 	},
-	Camouflage = {--Used on activation only
+	Camouflage = {
 		Body = 'Hunter\'s Jerkin',
+	},
+	Barrage = {
 	},
 	
 --Other sets
@@ -470,6 +483,11 @@ profile.HandleDefault = function()
 		else
 			gFunc.EquipSet(sets.Weapon_Default)
 		end
+		if (blinclude.GetCycle('Ranged') ~= 'Default') then 
+			gFunc.EquipSet('Ranged_' .. blinclude.GetCycle('Ranged'))
+		else
+			gFunc.EquipSet(sets.Ranged_Default)
+		end
 	end
 	
 	if (GetRangedType() == 'crossbow') then
@@ -656,14 +674,10 @@ profile.HandleMidshot = function()
 	
 	if (blinclude.GetCycle('TpSet') == 'Acc') then
 		gFunc.EquipSet(sets.Midshot_Acc);
-		is (sharpshot > 0) then
-			gFunc.EquipSet(sets.sharpshot);
-		end
 	end
 
     if barrage > 0 then --ensure acc as base if barrage up
-		gFunc.EquipSet(sets.Midshot_Acc);
-        gFunc.EquipSet(sets.Barrage);
+        gFunc.EquipSet(sets.BarrageOn);
     end
 	
 	if (blinclude.GetCycle('TH') ~= 'none') then gFunc.EquipSet(sets.TH) end

@@ -21,6 +21,7 @@ local blkeybinds = T{};
 /helmset		-Equip gathering set
 /disable		-Disables automatic gear swaps for all slots
 /weapon			-Cycles weapons
+/ranged			-(RNG) Cycles ranged weapons
 /modes			-Prints a list of your currently set modes.
 /nukeset		-(RDM BLM SCH GEO) Cycles nuke sets 
 /burst			-(RDM BLM SCH GEO) Toggles magic burst set 
@@ -58,6 +59,7 @@ local binds = T{
 	['@X'] = 'xpring',
 	['@D'] = 'disable',
 	['@W'] = 'weapon',
+	['@R'] = 'ranged',
 	['@A'] = 'ammo',
 	['F10'] = 'modes',
 };

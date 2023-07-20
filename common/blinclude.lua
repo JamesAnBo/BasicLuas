@@ -22,7 +22,7 @@ blsets = gFunc.LoadFile('common\\blsets.lua');
 obiLib = gFunc.LoadFile('common\\obis.lua');
 
 
-blinclude.AliasList = T{'blmessages','wsdistance','dt','th','kite','tpset','idleset','weapon','ammo','weaponlock','wlock','disable','modes','bldrain','nukeset','burst','elecycle','nuke','fight', 'sir','tankset','pupmode','tpgun','cormsg','forcestring','warpme','xpring','rrset','craftset','fishset','helmset','zeniset','showswaps','testcheck','highmp','bldebug','jacancel','jac'};
+blinclude.AliasList = T{'blmessages','wsdistance','dt','th','kite','tpset','idleset','weapon','ranged','ammo','weaponlock','wlock','disable','modes','bldrain','nukeset','burst','elecycle','nuke','fight', 'sir','tankset','pupmode','tpgun','cormsg','forcestring','warpme','xpring','rrset','craftset','fishset','helmset','zeniset','showswaps','testcheck','highmp','bldebug','jacancel','jac'};
 blinclude.Towns = T{'Tavnazian Safehold','Al Zahbi','Aht Urhgan Whitegate','Nashmau','Southern San d\'Oria [S]','Bastok Markets [S]','Windurst Waters [S]','San d\'Oria-Jeuno Airship','Bastok-Jeuno Airship','Windurst-Jeuno Airship','Kazham-Jeuno Airship','Southern San d\'Oria','Northern San d\'Oria','Port San d\'Oria','Chateau d\'Oraguille','Bastok Mines','Bastok Markets','Port Bastok','Metalworks','Windurst Waters','Windurst Walls','Port Windurst','Windurst Woods','Heavens Tower','Ru\'Lude Gardens','Upper Jeuno','Lower Jeuno','Port Jeuno','Rabao','Selbina','Mhaura','Kazham','Norg','Mog Garden','Celennia Memorial Library','Western Adoulin','Eastern Adoulin'};
 blinclude.LockingRings = T{'Echad Ring', 'Trizek Ring', 'Endorsement Ring', 'Return Ring', 'Homing Ring', 'Warp Ring','Facility Ring','Dim. Ring (Dem)','Dim. Ring (Mea)','Dim. Ring (Holla)','Altep Ring','Dem Ring','Holla Ring','Mea Ring','Vahzl Ring','Yhoat Ring'};
 blinclude.LockingWeapons = T{'Warp Cudgel', 'Treat Staff II', 'Trick Staff II'};
@@ -204,9 +204,6 @@ function blinclude.SetVariables()
 			blinclude.CreateCycle('Element', {[1] = 'Thunder', [2] = 'Blizzard', [3] = 'Fire', [4] = 'Stone', [5] = 'Aero', [6] = 'Water', [7] = 'Light', [8] = 'Dark'});
 		end
 	end
-	if player.MainJob == 'RNG' then
-		blinclude.CreateCycle('RangedType', {[1] = 'XBow', [2] = 'Bow', [3] = 'Gun'});
-	end
 	if (player.MainJob == 'THF') then
 		blinclude.CreateCycle('TH', {[1] = 'tag', [2] = 'Fulltime', [3] = 'none'});
 	else
@@ -319,16 +316,6 @@ function blinclude.SetCommands(args)
 			toggle = 'Ammo';
 			status = blinclude.GetCycle('Ammo');
 		end
-    elseif (args[1] == 'rangedtype') or (args[1] == 'rtype') then
-		if (#args > 1) then
-			blinclude.SetCycle('RangedType', args[2])
-			toggle = 'Ranged Type';
-			status = blinclude.GetCycle('RangedType');
-		else
-			blinclude.AdvanceCycle('RangedType');
-			toggle = 'Ranged Type';
-			status = blinclude.GetCycle('RangedType');
-		end
 	elseif (args[1] == 'weaponlock') or (args[1] == 'wlock') then
 		if (blinclude.GetToggle('Disabled') == false) then
 			if (blinclude.GetToggle('WeaponLock') == false) then
@@ -363,9 +350,6 @@ function blinclude.SetCommands(args)
 			toggle = 'TH Mode';
 			status = blinclude.GetCycle('TH');
 		end
-		-- blinclude.AdvanceToggle('TH');
-		-- toggle = 'TH Mode';
-		-- status = blinclude.GetToggle('TH');
 	elseif (args[1] == 'bldrain') then
 		blinclude.DoDrain();
 	elseif (args[1] == 'warpme') then
@@ -498,6 +482,19 @@ function blinclude.SetCommands(args)
 			blinclude.AdvanceToggle('String');
 			toggle = 'BRD Forced Harp';
 			status = blinclude.GetToggle('String');
+		end
+	end
+	if (player.MainJob == 'RNG') then
+		if (args[1] == 'ranged') then
+			if (#args > 1) then
+				blinclude.SetCycle('Ranged', args[2])
+				toggle = 'Ranged weapon';
+				status = blinclude.GetCycle('Ranged');
+			else
+				blinclude.AdvanceCycle('Ranged');
+				toggle = 'Ranged weapon';
+				status = blinclude.GetCycle('Ranged');
+			end
 		end
 	end
 	if (player.MainJob == 'COR') then
