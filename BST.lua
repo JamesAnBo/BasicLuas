@@ -8,7 +8,7 @@
 local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
---local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -356,9 +356,9 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				--if (not isTargetTagged()) then
+				if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				--end
+				end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
