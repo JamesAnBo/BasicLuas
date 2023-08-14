@@ -7,7 +7,7 @@ local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local rangedTable = gFunc.LoadFile('common\\rangedtypes.lua');
-local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+--local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 
 --If you change the names here, Make sure to change the weapon sets below to match.
@@ -240,6 +240,7 @@ local sets = {
         Legs = 'Hunter\'s Braccae',
         Feet = 'Hunter\'s Socks',
 		},
+	BarrageOn_Acc = {};
 	
 --Weaponskill sets
     Ws_Default = {
@@ -257,7 +258,8 @@ local sets = {
         Feet = 'Hunter\'s Socks',
 		},
 	Ws_Acc = {},
-	Hot_Shot = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
     Slug_Shot = {--AGI:70% (STR>AGI) 1-hit Acc Light/Aqua/Breeze
 	},
 	Heavy_Shot = {--AGI:70% 1-hit Crit Light/Flame
@@ -522,9 +524,9 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				if (not isTargetTagged()) then
+				--if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				end
+				--end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
@@ -670,6 +672,9 @@ end
 profile.HandleMidshot = function()
     local barrage = gData.GetBuffCount('Barrage');
 	local sharpshot = gData.GetBuffCount('Sharpshot');
+	local player = gData.GetPlayer();
+	local ammo = gData.GetEquipment().Ammo;
+	
     gFunc.EquipSet(sets.Midshot);
 	
 	if (blinclude.GetCycle('TpSet') == 'Acc') then
@@ -680,11 +685,18 @@ profile.HandleMidshot = function()
         gFunc.EquipSet(sets.BarrageOn);
     end
 	
+	if string.match(ammo.Name, 'Holy Bolt') then
+		if (player.MPP <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
+	end
+	
 	if (blinclude.GetCycle('TH') ~= 'none') then gFunc.EquipSet(sets.TH) end
 end
 
 profile.HandleWeaponskill = function()
 	local LimitedAmmo = T{'Cmb.Cst. Arrow','T.K. Arrow','Ptr.Prt. Arrow','Irn.Msk. Bolt','Gld.Msk. Bolt','Heavy Shell'};
+	local player = gData.GetPlayer();
 	local ws = gData.GetAction();
 	local unlimitedshot = gData.GetBuffCount('Unlimited Shot');
 	local ammo = gData.GetEquipment().Ammo;
@@ -723,10 +735,20 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Arching_Arrow)
 		elseif string.match(ws.Name, 'Empyreal Arrow') then
             gFunc.EquipSet(sets.Empyreal_Arrow)
-		elseif string.match(ws.Name, 'Hot Shot') then
-			gFunc.EquipSet(sets.Hot_Shot)
-			if (weather.WeatherElement == 'Fire') or (weather.DayElement == 'Fire') then
-				obiLib:Evaluate(0.1);
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (string.match(ws.Name, 'Hot Shot') or string.match(ws.Name, 'Flaming Arrow')) then
+				if (weather.WeatherElement == 'Fire') or (weather.DayElement == 'Fire') then
+					obiLib:Evaluate(0.1);
+				end
+			end
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
     end

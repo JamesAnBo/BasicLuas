@@ -75,17 +75,28 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
 		--Main = 'Dark staff',
 		--Sub = '';
 	},
 
 --Idle sets
-	
-    Idle_Default = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
-		Hands = 'Battle Gloves',
-		Ring1 = 'Balance Ring',
-		Ring2 = 'Balance Ring',
+
+    Idle_Default_Priority = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
+		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
+        Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
+        Neck = {'Peacock Amulet', 'Spike Necklace'},
+        Ear1 = {'Coral Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Beetle Earring +1'},
+        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+		Hands = {'Battle Gloves'},
+		Ring1 = {'Rajas Ring', 'Balance Ring'},
+		Ring2 = {'Sniper\'s Ring','Balance Ring'},
+        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
+        Legs = {'Republic Subligar'},
+        Feet = {'Drachen Brais','Federation Gaiters','Ctr. Greaves'},
 	},
     Resting = { --If you use a weapon for resting, put the weapon in Weapon_Resting.
 	},
@@ -100,12 +111,26 @@ local sets = {
 	Pet_HP = {},
 	
 --Engaged sets
-    Tp_Default = {
-		Hands = 'Battle Gloves',
-		Ring1 = 'Balance Ring',
-		Ring2 = 'Balance Ring',
+    Tp_Default_Priority = {
+		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
+        Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
+        Neck = {'Peacock Amulet', 'Spike Necklace'},
+        Ear1 = {'Coral Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Beetle Earring +1'},
+        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+		Hands = {'Battle Gloves'},
+		Ring1 = {'Rajas Ring', 'Balance Ring'},
+		Ring2 = {'Sniper\'s Ring','Balance Ring'},
+        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Waist = {'Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
+        Legs = {'Republic Subligar'},
+        Feet = {'Drachen Brais','Federation Gaiters','Ctr. Greaves'},
 	},
 	Tp_Acc = {},
+	
+	-- Tp_Night {
+		-- --Head = 'Vampire Mask',
+	-- },
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -126,12 +151,24 @@ local sets = {
     Midshot = { },
 
 --Weaponskill sets
-    Ws_Default = {
-		Hands = 'Custom M Gloves',
-		Ring1 = 'Courage Ring',
-		Ring2 = 'Courage Ring',
+    Ws_Default_Priority = {
+		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
+        Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
+        Neck = {'Peacock Amulet', 'Spike Necklace'},
+        Ear1 = {'Coral Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Beetle Earring +1'},
+        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+		Hands = {'Custom M Gloves'},
+		Ring1 = {'Rajas Ring', 'Courage Ring'},
+		Ring2 = {'Sniper\'s Ring','Courage Ring'},
+        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
+        Legs = {'Republic Subligar'},
+        Feet = {'Drachen Brais','Federation Gaiters','Ctr. Greaves'},
 	},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
 	Ws_Default_SA = {},
     Penta_Thrust = {--STR:20% DEX:20% 5-hit Acc Shadow
 	},
@@ -141,9 +178,20 @@ local sets = {
 	},
 
 --Ability sets
-    Jumps = {
-		Ring1 = 'Courage Ring',
-		Ring2 = 'Courage Ring',
+    Jumps_Priority = {
+		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
+        Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
+        Neck = {'Peacock Amulet', 'Spike Necklace'},
+        Ear1 = {'Coral Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Beetle Earring +1'},
+        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+		Hands = {'Custom M Gloves'},
+		Ring1 = {'Rajas Ring', 'Courage Ring'},
+		Ring2 = {'Sniper\'s Ring','Courage Ring'},
+        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
+        Legs = {'Republic Subligar'},
+        Feet = {'Drachen Brais', 'Volans Greaves', 'Federation Gaiters', 'Ctr. Greaves'},
 	},
 	Angon = {
 		Ammo = 'Angon',
@@ -188,6 +236,22 @@ local sets = {
         -- Legs = 'Remove',
         -- Feet = 'Remove',
 	},
+    ['export'] = {
+        Main = 'Lance +1',
+        Ammo = 'Balm Sachet',
+        Head = 'Mrc.Cpt. Headgear',
+        Neck = 'Peacock Amulet',
+        Ear1 = 'Beetle Earring +1',
+        Ear2 = 'Beetle Earring +1',
+        Body = 'Mrc.Cpt. Doublet',
+        Hands = 'Battle Gloves',
+        Ring1 = 'Rajas Ring',
+        Ring2 = 'Balance Ring',
+        Back = 'Wolf Mantle +1',
+        Waist = 'Brave Belt',
+        Legs = 'Republic Subligar',
+        Feet = 'Volans Greaves',
+    },
 };
 profile.Sets = sets;
 
@@ -206,19 +270,19 @@ local Settings = {
 	Macros = true; -- set to true for macro book and macro set changes on load/sj change.
 	MacroBook = 14; -- The macro book you want for this job. Otherwise set to false.
 	MacroSets = { --  ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
-		[1] = 3, --WAR
+		[1] = 0, --WAR
 		[2] = 0, --MNK
 		[3] = 6, --WHM
 		[4] = 0, --BLM
-		[5] = 5, --RDM
-		[6] = 2, --THF
+		[5] = 0, --RDM
+		[6] = 0, --THF
 		[7] = 0, --PLD
 		[8] = 0, --DRK
 		[9] = 0, --BST
 		[10] = 0, --BRD
 		[11] = 0, --RNG
-		[12] = 1, --SAM
-		[13] = 4, --NIN
+		[12] = 0, --SAM
+		[13] = 0, --NIN
 		[14] = 0, --DRG
 		[15] = 0, --SMN
 	};
@@ -323,6 +387,7 @@ end
 profile.HandleDefault = function()
 	blinclude.CheckLevelSync(profile.Sets);
 	UpdateSubJob()
+	local game = gData.GetEnvironment();
 	local player = gData.GetPlayer();
 	local petAction = gData.GetPetAction();
 	
@@ -344,6 +409,10 @@ profile.HandleDefault = function()
 		
 		if blinclude.GetCycle('TpSet') == 'Acc' then
 			gFunc.EquipSet(sets.Tp_Acc)
+		end
+		
+		if (game.Time < 6.00) or (game.Time > 18.00) then
+			gFunc.EquipSet(sets.Tp_Night)
 		end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
@@ -436,6 +505,9 @@ profile.HandleMidcast = function()
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
 		end
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
     elseif (spell.Skill == 'Dark Magic') then
 		if (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
@@ -467,6 +539,7 @@ profile.HandleWeaponskill = function()
 		gFunc.CancelAction()
 		return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
         local sa = gData.GetBuffCount('Sneak Attack');
     
@@ -485,6 +558,16 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Impulse_Drive)
 			if (sa >= 1) then
 				gFunc.EquipSet(sets.Impulse_Drive_SA)
+			end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
     end

@@ -11,7 +11,7 @@
 local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
-local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+--local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -80,6 +80,7 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
 		--Main = 'Dark staff',
 		--Sub = '';
@@ -102,7 +103,8 @@ local sets = {
 	Tp_Acc = {},
 
 --These will overwrite any above TP profile.Sets if /tankset is used
-    Tank_Main = {},--Default Tanking,  dt 
+    Tank_PDT = {},--Default Tanking,  dt 
+	Tank_MDT = {},
     Tank_MEVA = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
@@ -135,6 +137,8 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {}, --Spirits Within will not change gear.
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
     Savage_Blade = {},
 	Swift_Blade = {},
 	Vorpal_Blade = {},
@@ -317,15 +321,16 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				if (not isTargetTagged()) then
+				--if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				end
+				--end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
 		end
         if (blinclude.GetCycle('TankSet') ~= 'None') then
-			gFunc.EquipSet('Tank_' .. blinclude.GetCycle('TankSet')) end
+			gFunc.EquipSet('Tank_' .. blinclude.GetCycle('TankSet'))
+		end
     elseif (player.Status == 'Resting') then
         gFunc.EquipSet(sets.Resting);
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
@@ -433,12 +438,12 @@ profile.HandleMidcast = function()
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
 		end
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
     elseif (spell.Skill == 'Dark Magic') then
 		if (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
-			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
-				obiLib:Evaluate(0.1);
-			end
 		end
 	elseif (spell.Skill == 'Healing Magic') then
 		gFunc.EquipSet(sets.Cure);
@@ -465,6 +470,9 @@ profile.HandleMidcast = function()
 		elseif (string.contains(spell.Name, 'Banish')) or (string.contains(spell.Name, 'Holy')) then
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
 	else
@@ -509,7 +517,7 @@ profile.HandleWeaponskill = function()
 	elseif string.match(ws.Name, 'Spirits Within') then
 		return;
     else
-        
+        local player = gData.GetPlayer();
     
         gFunc.EquipSet(sets.Ws_Default)
 		
@@ -527,6 +535,16 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Black_Halo)
 		elseif string.match(ws.Name, 'Judgment') then
             gFunc.EquipSet(sets.Judgment)
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
 		end
     end
 end

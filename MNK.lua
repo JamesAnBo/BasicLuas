@@ -5,7 +5,7 @@
 local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
-local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+--local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -74,6 +74,7 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
 		--Main = 'Dark staff',
 		--Sub = '';
@@ -118,6 +119,8 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
 	Ws_Default_SA = {},
     Raging_Fists = {--STR:30% DEX:30% 5-hit fTP: 1.00/2/20/3.70 Thunder
 	},
@@ -299,9 +302,9 @@ profile.HandleDefault = function()
 		if (footwork >= 1) then gFunc.EquipSet(sets.Footwork) end
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				if (not isTargetTagged()) then
+				--if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				end
+				--end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
@@ -385,6 +388,9 @@ profile.HandleMidcast = function()
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
 		end
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
     elseif (spell.Skill == 'Dark Magic') then
 		if (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
@@ -413,6 +419,7 @@ profile.HandleWeaponskill = function()
 		gFunc.CancelAction()
 		return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
         local sa = gData.GetBuffCount('Sneak Attack');
     
@@ -440,7 +447,17 @@ profile.HandleWeaponskill = function()
 			end
 	    elseif string.match(ws.Name, 'Asuran Fists') then
             gFunc.EquipSet(sets.Asuran_Fists)
-        end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		end
     end
 end
 

@@ -6,7 +6,7 @@
 local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
-local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+--local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -97,6 +97,7 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
 		Main = 'Dark staff',
 		Sub = '';
@@ -209,6 +210,8 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
     Savage_Blade = {},
 	Evisceration = {},
 	Retribution = {},
@@ -372,9 +375,9 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				if (not isTargetTagged()) then
+				--if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				end
+				--end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
@@ -481,6 +484,9 @@ profile.HandleMidcast = function()
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
 		end
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
 		end;
@@ -517,6 +523,9 @@ profile.HandleMidcast = function()
 		if (string.contains(spell.Name, 'Banish')) or (string.contains(spell.Name, 'Holy')) then
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 			if (blinclude.GetCycle('Weapon') == 'Default') then 
 				gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -580,8 +589,11 @@ end
 
 profile.HandleWeaponskill = function()
     local canWS = blinclude.CheckWsBailout();
-    if (canWS == false) then gFunc.CancelAction() return;
+    if (canWS == false) then 
+		gFunc.CancelAction() 
+		return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
@@ -596,7 +608,17 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Evisceration)
 		if string.match(ws.Name, 'Retribution') then
             gFunc.EquipSet(sets.Retribution)
-        end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		end
     end
 end
 

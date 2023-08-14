@@ -27,6 +27,8 @@ blinclude.Towns = T{'Tavnazian Safehold','Al Zahbi','Aht Urhgan Whitegate','Nash
 blinclude.LockingRings = T{'Echad Ring', 'Trizek Ring', 'Endorsement Ring', 'Return Ring', 'Homing Ring', 'Warp Ring','Facility Ring','Dim. Ring (Dem)','Dim. Ring (Mea)','Dim. Ring (Holla)','Altep Ring','Dem Ring','Holla Ring','Mea Ring','Vahzl Ring','Yhoat Ring'};
 blinclude.LockingWeapons = T{'Warp Cudgel', 'Treat Staff II', 'Trick Staff II'};
 blinclude.DistanceWS = T{'Flaming Arrow','Piercing Arrow','Dulling Arrow','Sidewinder','Blast Arrow','Arching Arrow','Empyreal Arrow','Refulgent Arrow','Apex Arrow','Namas Arrow','Jishnu\'s Randiance','Hot Shot','Split Shot','Sniper Shot','Slug Shot','Blast Shot','Heavy Shot','Detonator','Numbing Shot','Last Stand','Coronach','Wildfire','Trueflight','Leaden Salute','Myrkr','Dagan','Moonlight','Starlight'};
+blinclude.elementalWS = T{'Gust Slash','Cyclone','Aeolian Edge','Burning Blade','Red Lotus Blade','Shining Blade','Seraph Blade','Sanguine Blade','Frostbite','Freezebite','Herculean Slash','Cloudspltter','Primal Rend','Dark Harvest','Shadow of Death','Infernal Scythe','Thunder Thrust','Raiden Thrust','Blade: Ei','Blade: Yu','Shining Strike','Seraph Strike','Flash Nova','Rock Crusher','Earth Crusher','Starburst','Sunburst','Cataclysm','Vidohunir','Garland of Bliss','Omniscience','Wildfire','Trueflight','Leaden Salute'};
+blinclude.hybridWS = T{'Blade: Teki','Blade: To','Blade: Chi','Tachi: Goten','Tachi: Kagero','Tachi: Jinpu','Tachi: Koki','Flaming Arrow','Hot Shot'};
 blinclude.BstPetAttack = T{'Foot Kick','Whirl Claws','Big Scissors','Tail Blow','Blockhead','Sensilla Blades','Tegmina Buffet','Lamb Chop','Sheep Charge','Pentapeck','Recoil Dive','Frogkick','Queasyshroom','Numbshroom','Shakeshroom','Nimble Snap','Cyclotail','Somersault','Tickling Tendrils','Sweeping Gouge','Grapple','Double Claw','Spinning Top','Suction','Tortoise Stomp','Power Attack','Rhino Attack','Razor Fang','Claw Cyclone','Crossthrash','Scythe Tail','Ripper Fang','Chomp Rush','Pecking Flurry','Sickle Slash','Mandibular Bite','Wing Slap','Beak Lunge','Head Butt','Wild Oats','Needle Shot','Disembowel','Extirpating Salvo','Mega Scissors','Back Heel','Hoof Volley','Fluid Toss','Fluid Spread'};
 blinclude.BstPetMagicAttack = T{'Gloom Spray','Fireball','Acid Spray','Molting Plumage','Cursed Sphere','Nectarous Deluge','Charged Whisker','Nepenthic Plunge'};
 blinclude.BstPetMagicAccuracy = T{'Toxic Spit','Acid Spray','Leaf Dagger','Venom Spray','Venom','Dark Spore','Sandblast','Dust Cloud','Stink Bomb','Slug Family','Intimidate','Gloeosuccus','Spider Web','Filamented Hold','Choke Breath','Blaster','Snow Cloud','Roar','Palsy Pollen','Spore','Brain Crush','Choke Breath','Silence Gas','Chaotic Eye','Sheep Song','Soporific','Predatory Glare','Sudden Lunge','Numbing Noise','Jettatura','Bubble Shower','Spoil','Scream','Noisome Powder','Acid Mist','Rhinowrecker','Swooping Frenzy','Venom Shower','Corrosive Ooze','Spiral Spin','Infrasonics','Hi-Freq Field','Purulent Ooze','Foul Waters','Sandpit','Infected Leech','Pestilent Plume'};
@@ -194,6 +196,7 @@ function blinclude.SetVariables()
 	blinclude.CreateToggle('DTset', false);
 	blinclude.CreateToggle('Kite', false);
 	blinclude.CreateToggle('Debug', false);
+	blinclude.CreateToggle('SIR', false);
 	blinclude.CreateCycle('TpSet', {[1] = 'Default', [2] = 'Acc'});
 	blinclude.CreateCycle('IdleSet', {[1] = 'Default', [2] = 'Defense', [3] = 'Refresh', [4] = 'Regen'});
 	if (player.MainJob == 'RDM') or (player.MainJob == 'BLM') then
@@ -213,8 +216,7 @@ function blinclude.SetVariables()
 		blinclude.CreateToggle('Fight', false);
 	end
 	if (player.MainJob == 'PLD') then
-		blinclude.CreateToggle('SIR', false);
-		blinclude.CreateCycle('TankSet', {[1] = 'Main', [2] = 'MEVA', [3] = 'None'});
+		blinclude.CreateCycle('TankSet', {[1] = 'PDT', [2] = 'MDT', [3] = 'MEVA', [4] = 'None'});
 	end
 	if (player.MainJob == 'PUP') then
 		blinclude.CreateCycle('PupMode', {[1] = 'Tank', [2] = 'Melee', [3] = 'Ranger', [4] = 'Mage'});
@@ -336,6 +338,10 @@ function blinclude.SetCommands(args)
 				status = blinclude.GetToggle('WeaponLock');
 			end
 		end
+	elseif (args[1] == 'sir') then
+		blinclude.AdvanceToggle('SIR');
+		toggle = 'Spell Interupt Set';
+		status = blinclude.GetToggle('SIR');
 	elseif (args[1] == 'kite') then
 		blinclude.AdvanceToggle('Kite');
 		toggle = 'Kite Set';
@@ -453,11 +459,6 @@ function blinclude.SetCommands(args)
 		end
 	end
 	if (player.MainJob == 'PLD') then
-		if (args[1] == 'sir') then
-			blinclude.AdvanceToggle('SIR');
-			toggle = 'Spell Interupt Set';
-			status = blinclude.GetToggle('SIR');
-		end
 		if (args[1] == 'tankset') then
 			if (#args > 1) then
 				blinclude.SetCycle('TankSet', args[2])

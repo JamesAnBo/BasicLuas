@@ -7,7 +7,7 @@ local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local rangedTable = gFunc.LoadFile('common\\rangedtypes.lua');
-local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+--local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -77,6 +77,11 @@ local sets = {
 		Sub = 'Maple Shield'
 	},
 	
+	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
+		-- Main = 'Dark staff',
+		-- Sub = '';
+	},
+	
 --Ammos to cycle through
 	--Crossbow
 	Ammo_Default = {-- Put your default crossbow ammo here. Or leave it blank to allow manual ammo changing while on default mode.
@@ -107,10 +112,6 @@ local sets = {
 		-- Ammo = 'Bomb Core',
 	},
 	
-	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
-		-- Main = 'Dark staff',
-		-- Sub = '';
-	},
 
 --Idle sets
 	
@@ -169,6 +170,8 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
 	Ws_Default_SA = {},
 	Sickle_Moon ={--STR:40% AGI:40% 2-hit fTP: 1.50/2.00/2.75 Soil/Thunder
 	},
@@ -358,7 +361,7 @@ profile.OnLoad = function()
 	gSettings.AllowSyncEquip = false;
 	
     blinclude.Initialize();
-	CreateAmmoCycle:once(1)
+	CreateAmmoCycle:once(1);
 	SetLockstyle:once(2);
 	SetMacros:once(3);
 	
@@ -414,9 +417,9 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				if (not isTargetTagged()) then
+				--if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				end
+				--end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
@@ -506,7 +509,7 @@ profile.HandleMidcast = function()
         else
             gFunc.EquipSet(sets.DebuffINT);
         end
-		gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
+		--gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
     elseif (spell.Skill == 'Elemental Magic') then
         if (ElementalDebuffs:contains(spell.Name)) then
             gFunc.EquipSet(sets.ElementalDebuff);
@@ -516,20 +519,20 @@ profile.HandleMidcast = function()
 				obiLib:Evaluate(0.1);
 			end
         end
-		gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
+		--gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
     elseif (spell.Skill == 'Dark Magic') then
 		gFunc.EquipSet(sets.DarkMagic);
         if (spell.Name == 'Stun') then
             gFunc.EquipSet(sets.Stun);
 		elseif (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
-			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
-				obiLib:Evaluate(0.1);
-			end
         elseif (string.match(spell.Name, 'Dread Spikes')) then
             gFunc.EquipSet(sets.Dread_Spikes);
         end
-		gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
+		--gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
 	elseif (spell.Skill == 'Healing Magic') then
 		gFunc.EquipSet(sets.Cure);
 		if string.match(spell.Name, 'Cursna') then
@@ -572,6 +575,7 @@ profile.HandleWeaponskill = function()
 		gFunc.CancelAction() 
 		return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
         local sa = gData.GetBuffCount('Sneak Attack');
     
@@ -598,6 +602,16 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Spiral_Hell)
 			if (sa >= 1) then
 				gFunc.EquipSet(sets.Spiral_Hell_SA)
+			end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
     end

@@ -13,7 +13,8 @@ local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 	--DO NOT CHANGE 'Default'
 	--if 'Great_Axe' is changed to 'Dagger'
 	--then Weapon_Great_Axe must be changed to Weapon_Dagger
-blinclude.CreateCycle('Weapon', {[1] = 'Default', [2] = 'Great_Axe', [3] = 'Polearm', [4] = 'Great_Sword', [5] = 'Axe'});
+blinclude.CreateCycle('Weapon', {[1] = 'Default', [2] = 'Great_Axe', [3] = 'Polearm', [4] = 'Axe_Axe', [5] = 'Axe_Sword'});
+
 
 --[[
 
@@ -57,7 +58,7 @@ Example_set_Priority = {
         Hands = { 'Thick Mufflers', 'Fighter\'s Mufflers', 'Custom M Gloves' },
         Ring1 = { 'Rajas Ring', 'Balance Ring' },
 		Ring2 = { 'Sniper\'s Ring', 'Bastokan Ring' },
-        Back = { 'Amemet Mantle', 'Rabbit Mantle' },
+        Back = { 'Amemet Mantle +1', 'Rabbit Mantle' },
         Waist = { 'Warrior\'s Belt +1' },
         Legs = { 'Byakko\'s Haidate', 'Ryl.Kgt. Breeches', 'Republic Subligar' },
         Feet = { 'Fighter\'s Calligae', 'Ctr. Greaves' },
@@ -70,17 +71,26 @@ local sets = {
 	
 --Weapons to cycle through
 	Weapon_Great_Axe_Priority = {
-		Main = {'Byakko\'s Axe','Ulfhedinn Axe','Gigant Axe'}
+		Main = {'Byakko\'s Axe','Gigant Axe'}
 	},
 	Weapon_Polearm_Priority = {
 		Main = 'Couse',
 	},
-	Weapon_Great_Sword_Priority = {
-		Main = 'Skofnung',
+	-- Weapon_Great_Sword_Priority = {
+		-- Main = 'Skofnung',
+	-- },
+	Weapon_Axe_Axe_Priority = {
+		Main = {'Martial Axe','Tungi'},
+		Sub = {'Maneater', 'Tungi','Viking Axe'}
 	},
-	Weapon_Axe_Priority = {
-		Main = {'Maneater','Tungi'},
-		Sub = {'Joyeuse', 'Tungi','Viking Axe'}
+	Weapon_Axe_Sword_Priority = {
+			Main = {'Maneater','Tungi'},
+			Sub = {'Joyeuse', 'Tungi','Viking Axe'}
+		},
+	
+	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
+		--Main = 'Dark staff',
+		--Sub = '';
 	},
 	
 --Ammos to cycle through
@@ -112,27 +122,21 @@ local sets = {
 		Range = '',
 		Ammo = { 'Bomb Core', 'Balm Sachet' }
 	},
-	
-	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
-		--Main = 'Dark staff',
-		--Sub = '';
-	},
-
 
 --Idle sets
     Idle_Default_Priority = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
 		Head = { 'Genbu\'s Kabuto','Optical Hat', 'Celata', 'Fighter\'s Mask', 'Centurion\'s Visor' },
-        Neck = { 'Peacock Amulet', 'Spike Necklace' },
+        Neck = { 'Fortitude Torque', 'Peacock Amulet', 'Spike Necklace' },
         Ear1 = { 'Bushinomimi', 'Coral Earring','Beetle Earring +1' },
         Ear2 = { 'Coral Earring','Beetle Earring +1' },
         Body = { 'Kirin\'s Osode', 'Haubergeon', 'Ryl.Kgt. Chainmail', 'Brigandine', 'Ryl.Sqr. Chainmail', 'Ctr. Scale Mail' },
         Hands = { 'Seiryu\'s Kote', 'Thick Mufflers', 'Fighter\'s Mufflers', 'Custom M Gloves' },
         Ring1 = { 'Rajas Ring', 'Balance Ring' },
 		Ring2 = { 'Sniper\'s Ring', 'Bastokan Ring' },
-        Back = { 'Amemet Mantle', 'Rabbit Mantle' },
+        Back = { 'Amemet Mantle +1', 'Rabbit Mantle' },
         Waist = { 'Warwolf Belt','Warrior\'s Belt +1' },
         Legs = { 'Byakko\'s Haidate', 'Ryl.Kgt. Breeches', 'Republic Subligar' },
-        Feet = { 'Suzaku\'s Sune-Ate', 'Fighter\'s Calligae', 'Ctr. Greaves' },
+        Feet = { 'Suzaku\'s Sune-Ate', 'Fighter\'s Calligae','Irn.Msk. Sabatons', 'Ctr. Greaves' },
     },
     Resting_Priority = {--If you use a weapon for resting, put the weapon in Weapon_Resting.
 	},
@@ -144,14 +148,14 @@ local sets = {
 --Defense sets
 	Dt_Priority = {
         Head = 'Genbu\'s Kabuto',
-        Neck = 'Ryl.Grd. Collar',
+        Neck = 'Fortitude Torque',
         Ear1 = 'Bushinomimi',
         Ear2 = 'Coral Earring',
         Body = 'Kirin\'s Osode',
         Hands = 'Seiryu\'s Kote',
         Ring1 = 'Rajas Ring',
 		Ring2 = 'Bomb Queen Ring',
-        Back = 'Amemet Mantle',
+        Back = 'Amemet Mantle +1',
         Waist = 'Warwolf Belt',
         Legs = 'Byakko\'s Haidate',
         Feet = 'Suzaku\'s Sune-Ate',
@@ -161,20 +165,21 @@ local sets = {
     Tp_Default_Priority = {
 		
 		Head = { 'Optical Hat', 'Celata', 'Fighter\'s Mask', 'Centurion\'s Visor' },
-        Neck = { 'Peacock Amulet', 'Spike Necklace' },
+        Neck = { 'Fortitude Torque','Peacock Amulet', 'Spike Necklace' },
         Ear1 = { 'Bushinomimi', 'Coral Earring', 'Beetle Earring +1' },
         Ear2 = { 'Coral Earring','Beetle Earring +1' },
         Body = { 'Haubergeon', 'Ryl.Kgt. Chainmail', 'Brigandine', 'Ryl.Sqr. Chainmail', 'Ctr. Scale Mail' },
-        Hands = { 'Thick Mufflers', 'Custom M Gloves' },
+        Hands = { 'Dusk Gloves', 'Thick Mufflers', 'Custom M Gloves' },
         Ring1 = { 'Rajas Ring', 'Balance Ring' },
 		Ring2 = { 'Sniper\'s Ring', 'Balance Ring' },
-        Back = { 'Amemet Mantle', 'Rabbit Mantle' },
+        Back = { 'Amemet Mantle +1', 'Rabbit Mantle' },
         Waist = { 'Swift Belt','Life Belt', 'Tilt Belt', 'Brave Belt' },
         Legs = { 'Byakko\'s Haidate', 'Fighter\'s Cuisses', 'Republic Subligar' },
-        Feet = { 'Fighter\'s Calligae', 'Ctr. Greaves' },
+        Feet = { 'Fighter\'s Calligae','Irn.Msk. Sabatons', 'Ctr. Greaves' },
     },
 	Tp_Acc_Priority = {
-		--Head = { 'Dream Hat +1' },
+		Neck = 'Peacock Amulet',
+		Waist = 'Warrior\'s Stone',
 	},
 
 --Precast sets (Fast Cast + Casting time reduction)
@@ -209,16 +214,20 @@ local sets = {
         Neck = {'Peacock Amulet'},
         Ear1 = {'Bushinomimi'},
         Ear2 = {'Coral Earring'},
-        Body = {'Haubergeon'},
+        Body = {'Hecatomb Harness', 'Haubergeon'},
         Hands = {'Thick Mufflers'},
         Ring1 = {'Rajas Ring'},
         Ring2 = {'Sniper\'s Ring'},
-        Back =  {'Amemet Mantle'},
+        Back =  {'Amemet Mantle +1'},
         Waist = { 'Warwolf Belt', 'Life Belt' },
         Legs = {'Byakko\'s Haidate'},
-		Feet = 'Hct. Leggings',
+		Feet = {'Hct. Leggings'}
 	},
-	Ws_Acc_Priority = {},
+	Ws_Acc_Priority = {
+		Waist = 'Warrior\'s Stone',
+	},
+	Ws_Elemental_Priority = {},
+	Ws_Hybrid_Priority = {},
 	Ws_Default_SA_Priority = {
 		Body = 'Kirin\'s Osode',
 	},
@@ -236,31 +245,36 @@ local sets = {
 	Ground_Strike_Priority = {--STR:50% INT:50% 1-hit fTP 1.50/1.75/3.00 Breeze/Thunder/Aqua/Snow
 	},
 	Ground_Strike_SA_Priority = {
-        Head = 'Celata',
+        Head = 'Wyvern Helm',
         Neck = 'Spike Necklace',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
         Ring2 = 'Courage Ring',
 	},
-	Smash_Axe_Priority = {},
-	Gale_Axe_Priority = {},
 	Rampage_Priority = {--STR:50% 5-hit Crit Soil
+		Waist = 'Warrior\'s Stone',
 	},
 	Decimation_Priority = {--STR:50% 3-hit Acc Flame/Light/Aqua
+		Waist = 'Warrior\'s Stone',
+		Ring2 = 'Flame Ring',
 	},
 	Raging_Rush_Priority = {--STR:50% 3-hit Crit Aqua/Snow
+		Neck = 'Fortitude Torque',
+		Waist = 'Warrior\'s Stone',
 	},
     Steel_Cyclone_Priority = {--STR:60% VIT60% 1-hit fTP: 1.50/1.75/3.00 Breeze/Aqua/Snow
         Head = 'Genbu\'s Kabuto',
+		Neck = 'Fortitude Torque',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
+		Ring2 = 'Flame Ring',
     },
 	Steel_Cyclone_SA_Priority = {
         Head = 'Genbu\'s Kabuto',
-        Neck = 'Spike Necklace',
+        Neck = 'Fortitude Torque',
         Body = 'Kirin\'s Osode',
         Hands = 'Fighter\'s Mufflers',
-        Ring2 = 'Courage Ring',
+        Ring2 = 'Flame Ring',
     },
 	
 --Ability Sets
@@ -271,10 +285,13 @@ local sets = {
 		Head = 'Fighter\'s Mask',
 		Body = 'Fighter\'s Lorica',
 		Hands = 'Fighter\'s Mufflers',
+		Waist = 'Warwolf Belt',
 		Legs = 'Fighter\'s Cuisses',
 		Feet = 'Fighter\'s Calligae',
 	},
-    Warcry = {},
+    Warcry = {
+		Head = 'Warrior\'s Mask',
+	},
     Aggressor = {},
     Defender = {},
     Berserk = {},
@@ -306,7 +323,7 @@ local sets = {
         -- Ear1 = 'Remove',
         -- Ear2 = 'Remove',
         -- Body = 'Remove',
-        -- Hands = 'Remove',
+        Hands = 'Dusk Gloves',
         -- Ring1 = 'Remove',
         -- Ring2 = 'Remove',
         -- Back = 'Remove',
@@ -423,10 +440,10 @@ function GetRangedType()
 end
 
 function CreateAmmoCycle()
-	if (GetRangedType() == 'crossbow') then
-		blinclude.CreateCycle('Ammo', {[1] = 'Default', [2] = 'Acid', [3] = 'Bloody', [4] = 'Sleep', [5] = 'Blind', [6] = 'Holy'});
-	else
+	if (GetRangedType() ~= 'crossbow') then
 		blinclude.CreateCycle('Ammo', {});
+	else
+		blinclude.CreateCycle('Ammo', {[1] = 'Default', [2] = 'Acid', [3] = 'Bloody', [4] = 'Sleep', [5] = 'Blind', [6] = 'Holy'});
 	end
 end
 
@@ -494,7 +511,7 @@ profile.HandleDefault = function()
 	elseif (GetRangedType() == 'bow') then
 		CreateAmmoCycle();
 		gFunc.EquipSet(sets.Ammo_Arrow)
-	elseif (equip.Range == nil) then
+	elseif (equip.Range == nil) and (blinclude.GetCycle('Ammo') == 'Default') then
 		gFunc.EquipSet(sets.Ammo_NoRanged);
 	else
 		CreateAmmoCycle();
@@ -599,7 +616,9 @@ profile.HandleMidcast = function()
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
 		end
-		
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
     elseif (spell.Skill == 'Dark Magic') then
 		if (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
@@ -646,6 +665,7 @@ profile.HandleWeaponskill = function()
 		gFunc.CancelAction()
 		return;
     else
+		local player = gData.GetPlayer();
 		local ws = gData.GetAction();
         local sa = gData.GetBuffCount('Sneak Attack');
     
@@ -685,6 +705,16 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Steel_Cyclone)
 			if (sa >= 1) then
 				gFunc.EquipSet(sets.Steel_Cyclone_SA)
+			end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
     end
