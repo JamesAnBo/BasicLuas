@@ -1,10 +1,8 @@
 --[[
-	SPECIAL TWISST EDITION Ver. 18.2
+	SPECIAL TWISST EDITION Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 	
 	DIRECT ALL QUESTIONS ON USAGE TO TWISST.
-	
-	18.1 -Updated to use current blinclude.lua
 ]]--
 
 local profile = {};
@@ -97,6 +95,7 @@ local sets = {
 		Main = 'Pluto\'s Staff',
 		Sub = '',
 	},	
+	
 --Idle sets
     Idle_Default = {
 		Head = '',	
@@ -489,8 +488,7 @@ local sets = {
 	},
 	
 	Ws_Acc = {},
-	
-	Seraph_Blade = {
+	Ws_Elemental = {
 		Head = 'Optical Hat',
 		Body = 'Cerise Doublet',
 		Hands = 'Devotee\'s Mitts',
@@ -502,9 +500,9 @@ local sets = {
 		Waist = 'Penitent\'s rope',
 		Ear1 = 'Geist Earring',
 		Ear2 = 'Moldavite Earring',
-		Back = 'White cape +1'},
-		
-		
+		Back = 'White cape +1'
+	},
+	Ws_Hybrid = {},
 		
 	Vorpal_Blade = {
 		Head = 'Optical Hat',
@@ -652,6 +650,9 @@ local function MCHighMPTrue()
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
 			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
 		end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -659,11 +660,7 @@ local function MCHighMPTrue()
 	elseif (spell.Skill == 'Dark Magic') then
 		gFunc.EquipSet(sets.DarkMagic_HighMP)
 		if (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
-			if (blinclude.GetCycle('NukeSet') == 'Power') then
-				if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
-					obiLib:Evaluate(0.1);
-				end
-			end
+			
 		end
 			
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
@@ -693,6 +690,9 @@ local function MCHighMPTrue()
 			gFunc.EquipSet(sets.Divine_HighMP)
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 			if (blinclude.GetCycle('Weapon') == 'Default') then 
 				gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -734,6 +734,9 @@ local function MCHighMPFalse()
 			end
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
@@ -790,6 +793,9 @@ local function MCHighMPFalse()
 		if (string.contains(spell.Name, 'Banish')) or (string.contains(spell.Name, 'Holy')) then
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 			if (blinclude.GetCycle('Weapon') == 'Default') then 
 				gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -941,9 +947,9 @@ profile.HandleDefault = function()
 			end
 			if (blinclude.GetCycle('TH') ~= 'none') then
 				if (blinclude.GetCycle('TH') == 'Tag') then 
-					if (not isTargetTagged()) then
-						gFunc.EquipSet(sets.TH);
-					end
+				--if (not isTargetTagged()) then
+					gFunc.EquipSet(sets.TH);
+				--end
 				elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 					gFunc.EquipSet(sets.TH);
 				end
@@ -1112,12 +1118,15 @@ profile.HandleMidshot = function()
 end
 
 profile.HandleWeaponskill = function()
+	local ws = gData.GetAction();
     local canWS = blinclude.CheckWsBailout();
     if (canWS == false) then 
 		gFunc.CancelAction() 
 		return;
+	elseif string.match(ws.Name, 'Spirits Within') then
+		return;
     else
-        local ws = gData.GetAction();
+		local player = gData.GetPlayer();
     
         gFunc.EquipSet(sets.Ws_Default)
 		
@@ -1125,12 +1134,20 @@ profile.HandleWeaponskill = function()
 			gFunc.EquipSet(sets.Ws_Acc);
 		end
 		
-		if string.match(ws.Name, 'Seraph Blade') then
-			gFunc.EquipSet(sets.Seraph_Blade)
-		elseif string.match(ws.Name, 'Vorpal Blade') then
+		if string.match(ws.Name, 'Vorpal Blade') then
             gFunc.EquipSet(sets.Vorpal_Blade)
 		elseif string.match(ws.Name, 'Savage Blade') then
             gFunc.EquipSet(sets.Savage_Blade)
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
 		end
     end
 end
