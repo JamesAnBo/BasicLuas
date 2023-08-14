@@ -1,8 +1,6 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
-	
-	18.1	-Removed GetRangedType(), Was redundent for BST
 ]]--
 
 local profile = {};
@@ -356,9 +354,9 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				if (not isTargetTagged()) then
+				--if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				end
+				--end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end

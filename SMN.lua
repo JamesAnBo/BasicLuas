@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 

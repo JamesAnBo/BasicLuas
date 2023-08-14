@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -207,6 +207,8 @@ local Settings = {
 	]]--
 	FastCast = (0 + 0); -- Your total Fast Cast (Traits + Gear in precast)
 	Snapshot = (0 + 0); -- Your total Snapshot (Traits + Gear in preshot)
+	
+	SorcerersRing = false; -- set to true if you want to automatically use Sorcerer's Ring when HP < 75% and TP < 1000%.
 	
 	Lockstyle = true; -- set to true for lockstyle on load/sj change. Otherwise set to false.
 	LockstyleSet = 0; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.

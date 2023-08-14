@@ -1,9 +1,6 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
-
-	18.1	-Fixed Typo in Sets.Weapon_Resting
-			-Removed GetRangedType(), Was redundent for RDM
 ]]--
 
 local profile = {};

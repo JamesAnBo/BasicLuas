@@ -1,9 +1,6 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
-	
-	18.1	-Added Parade Gorget equip when HPP >= 85%
-			-Removed GetRangedType(), Was redundent for PLD
 ]]--
 
 
