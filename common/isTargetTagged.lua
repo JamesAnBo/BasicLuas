@@ -1,9 +1,4 @@
---BasicLuas Ver. 18.2
---By Aesk (with much help from the Ashita discord members)
-
 local taggedMobs = T {};
-
-local isZoning  = false;
 
 local function ParseActionPacket(e)
     local bitData;
@@ -83,7 +78,13 @@ local function isMob(id)
 end
 
 local function onAction(e)
-    local playerId = GetPlayerEntity().ServerId;
+    local playerEntity = GetPlayerEntity();
+    local playerId;
+    if (playerEntity) then
+        playerId = playerEntity.ServerId;
+    else
+        return;
+    end
     local actorId = ashita.bits.unpack_be(e.data_raw, 0, 40, 32);
 
     -- We only care about actions done by the player
@@ -102,15 +103,17 @@ local function onAction(e)
 
     for _, target in ipairs(actionPacket.Targets) do
         if (isMob(target.Id)) then
-            taggedMobs[target.Id] = true;
+            taggedMobs[target.Id] = os.clock();
         end
     end
 end
 
 local deathMes = T { 6, 20, 97, 113, 406, 605, 646 };
 local function onMessage(e)
-    if (deathMes:contains(e.message)) then
-        taggedMobs[e.target] = nil;
+    local message = struct.unpack('i2', e.data, 0x18 + 1);
+    if (deathMes:contains(message)) then
+        local target = struct.unpack('i4', e.data, 0x08 + 1);
+        taggedMobs[target] = nil;
     end
 end
 
@@ -126,30 +129,19 @@ local function isTargetTagged()
 
     local targetId = targetManager:GetServerId(isSubTargetActive == 1 and 1 or 0);
 
-    return taggedMobs[targetId];
+    local tagged = taggedMobs[targetId];
+
+    return tagged and os.clock() - tagged < 550;
 end
 
 ashita.events.register('packet_in', 'packet_in_th_cb', function(e)
-    -- Packet: Zone Leave
-    if (e.id == 0x0A or e.id == 0x0B) then
-		onZone(e);
-        isZoning = true;
-        return;
+    if (e.id == 0x28) then
+        onAction(e);
+    elseif (e.id == 0x29) then
+        onMessage(e);
+    elseif (e.id == 0x0A or e.id == 0x0B) then
+        onZone(e);
     end
-
-    -- Packet: Inventory Update Completed
-    if (e.id == 0x001D) then
-        isZoning = false;
-        return;
-    end
-	
-	if (isZoning) then
-		return;
-	elseif (e.id == 0x28) then
-			onAction(e);
-	elseif (e.id == 0x29) then
-			onMessage(e);
-	end
 end);
 
 return isTargetTagged;

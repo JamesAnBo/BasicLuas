@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -78,6 +78,11 @@ local sets = {
 		Sub = 'Maple Shield'
 	},
 	
+	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
+		--Main = 'Dark staff',
+		--Sub = '';
+	},
+	
 --Ammos to cycle through
 	--Bow
 	Ammo_Default = {-- Put your default ammo here. Or leave it blank to allow manual ammo changing while on default mode.
@@ -90,11 +95,6 @@ local sets = {
 	},
 	Ammo_Sleep = {
 		Ammo = 'Sleep Arrow'
-	},
-	
-	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
-		Main = 'Dark staff',
-		Sub = '';
 	},
 
 --Idle sets
@@ -136,9 +136,9 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
 	Ws_Default_SA = {},
-	Ws_Hybrid = {
-	},
     Penta_Thrust = {--STR:20% DEX:20% 5-hit Acc Shadow
 	},
 	Impulse_Drive = {--STR:100% 2-hit fTP: 1.00/1.50/2.50 Shadow/Soil/Snow
@@ -471,12 +471,12 @@ profile.HandleMidshot = function()
 end
 
 profile.HandleWeaponskill = function()
-	local hybrids = T{'Tachi: Goten', 'Tachi: Kagero', 'Tachi: Jinpu', 'Tachi: Koki'};
     local canWS = blinclude.CheckWsBailout();
     if (canWS == false) then 
 		gFunc.CancelAction() 
 		return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
         local sa = gData.GetBuffCount('Sneak Attack');
     
@@ -490,14 +490,22 @@ profile.HandleWeaponskill = function()
             gFunc.EquipSet(sets.Ws_Default_SA);
         end
 
-		if (hybrids:contains(ws.Name)) then
-			gFunc.EquipSet(sets.Ws_Hybrid)
-	    elseif string.match(ws.Name, 'Penta Thrust') then
+	    if string.match(ws.Name, 'Penta Thrust') then
             gFunc.EquipSet(sets.Penta_Thrust)
         elseif string.match(ws.Name, 'Impulse Drive') then
             gFunc.EquipSet(sets.Impulse_Drive)
 			if (sa >= 1) then
 				gFunc.EquipSet(sets.Impulse_Drive_SA)
+			end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
     end

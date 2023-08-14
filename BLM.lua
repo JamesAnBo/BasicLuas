@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -76,6 +76,7 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
 		Main = 'Dark staff',
 		Sub = '';
@@ -158,6 +159,8 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
 
 --Other sets
     TH = {--/th will force this set to equip for 10 seconds
@@ -429,10 +432,11 @@ profile.HandleMidcast = function()
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
 			end
-			if (Settings.SorcerersRing == true) then
-				if (party:GetMemberHPPercent(0) < 75) and (party:GetMemberTP(0) < 1000) then
-					gFunc.Equip('Ring1', 'Sorcerer\'s Ring');
-				end
+			if (party:GetMemberHPPercent(0) < 75) and (party:GetMemberTP(0) < 1000) then
+				gFunc.Equip('Ring1', 'Sorcerer\'s Ring');
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
         end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
@@ -444,16 +448,6 @@ profile.HandleMidcast = function()
             gFunc.EquipSet(sets.Stun);
 		elseif (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
-			if (blinclude.GetCycle('NukeSet') == 'Power') then
-				if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
-					obiLib:Evaluate(0.1);
-				end
-			end
-			if (Settings.SorcerersRing == true) then
-				if (party:GetMemberHPPercent(0) < 75) and (party:GetMemberTP(0) < 1000) then
-					gFunc.Equip('Ring1', 'Sorcerer\'s Ring');
-				end
-			end
         end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -485,10 +479,11 @@ profile.HandleMidcast = function()
 			if (blinclude.GetCycle('Weapon') == 'Default') then 
 				gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
 			end
-			if (Settings.SorcerersRing == true) then
-				if (party:GetMemberHPPercent(0) < 75) and (party:GetMemberTP(0) < 1000) then
-					gFunc.Equip('Ring1', 'Sorcerer\'s Ring');
-				end
+			if (party:GetMemberHPPercent(0) < 75) and (party:GetMemberTP(0) < 1000) then
+				gFunc.Equip('Ring1', 'Sorcerer\'s Ring');
+			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
 		end
     end
@@ -511,12 +506,30 @@ profile.HandleWeaponskill = function()
 		gFunc.CancelAction() 
 		return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
 		
 		if (blinclude.GetCycle('TpSet') == 'Acc') then
 			gFunc.EquipSet(sets.Ws_Acc);
+		end
+		if (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.HPP < 75) then
+				gFunc.Equip('Ring1', 'Sorcerer\'s Ring');
+			end
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
 		end
     end
 end

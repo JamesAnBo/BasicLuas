@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -76,6 +76,12 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
+	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
+		-- Main = 'Dark staff',
+		-- Sub = '';
+	},
+	
 --Ammos to cycle through
 	--Crossbow
 	Ammo_Default = {-- Put your default crossbow ammo here. Or leave it blank to allow manual ammo changing while on default mode.
@@ -116,10 +122,6 @@ local sets = {
 		-- Ammo = 'Bomb Core',
 	},
 	
-	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
-		-- Main = 'Dark staff',
-		-- Sub = '';
-	},
 
 --Idle sets
 	
@@ -188,6 +190,8 @@ local sets = {
 		Feet = 'Hct. Leggings', 
 	},
 	Ws_Acc = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
     Ws_Default_SA = {
 		Hands = 'Hecatomb Mittens',
 		Feet = 'Hct. Leggings', 
@@ -584,6 +588,9 @@ profile.HandleMidcast = function()
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
 		end
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
+		end
     elseif (spell.Skill == 'Dark Magic') then
 		if (string.contains(spell.Name, 'Aspir')) or (string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
@@ -628,6 +635,7 @@ profile.HandleWeaponskill = function()
     local canWS = blinclude.CheckWsBailout();
     if (canWS == false) then gFunc.CancelAction() return;
     else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
         local sa = gData.GetBuffCount('Sneak Attack');
         local ta = gData.GetBuffCount('Trick Attack');
@@ -663,7 +671,17 @@ profile.HandleWeaponskill = function()
             elseif (ta >= 1) then
                 gFunc.EquipSet(sets.Evisceration_TA);
             end
-        end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		end
     end
 end
 

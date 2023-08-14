@@ -1,9 +1,6 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
-
-	18.1	-Fixed Typo in Sets.Weapon_Resting
-			-Removed GetRangedType(), Was redundent for RDM
 ]]--
 
 local profile = {};
@@ -79,6 +76,7 @@ local sets = {
 		Main = 'Bronze Axe',
 		Sub = 'Maple Shield'
 	},
+	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
 		Main = 'Dark staff',
 		Sub = '',
@@ -185,7 +183,8 @@ local sets = {
         Ring2 = 'Balance Ring',
 	},
 	Ws_Acc = {},
-	Seraph_Blade = {},
+	Ws_Elemental = {},
+	Ws_Hybrid = {},
 	Vorpal_Blade = {
 	},
 	Savage_Blade = {},
@@ -484,6 +483,9 @@ profile.HandleMidcast = function()
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
 			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
         end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -494,11 +496,6 @@ profile.HandleMidcast = function()
             gFunc.EquipSet(sets.Stun);
 		elseif (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
 			gFunc.EquipSet(sets.Drain);
-			if (blinclude.GetCycle('NukeSet') == 'Power') then
-				if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
-					obiLib:Evaluate(0.1);
-				end
-			end
         end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
@@ -540,6 +537,9 @@ profile.HandleMidcast = function()
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
 			end
+			if (spell.MppAftercast <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
 			if (blinclude.GetCycle('Weapon') == 'Default') then 
 				gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
 			end
@@ -572,12 +572,15 @@ profile.HandleMidshot = function()
 end
 
 profile.HandleWeaponskill = function()
+	local ws = gData.GetAction();
     local canWS = blinclude.CheckWsBailout();
     if (canWS == false) then 
 		gFunc.CancelAction() 
 		return;
+	elseif string.match(ws.Name, 'Spirits Within') then
+		return;
     else
-        local ws = gData.GetAction();
+		local player = gData.GetPlayer();
     
         gFunc.EquipSet(sets.Ws_Default)
 		
@@ -585,12 +588,20 @@ profile.HandleWeaponskill = function()
 			gFunc.EquipSet(sets.Ws_Acc);
 		end
 		
-		if string.match(ws.Name, 'Seraph Blade') then
-			gFunc.EquipSet(sets.Seraph_Blade)
-		elseif string.match(ws.Name, 'Vorpal Blade') then
+		if string.match(ws.Name, 'Vorpal Blade') then
             gFunc.EquipSet(sets.Vorpal_Blade)
 		elseif string.match(ws.Name, 'Savage Blade') then
             gFunc.EquipSet(sets.Savage_Blade)
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
 		end
     end
 end

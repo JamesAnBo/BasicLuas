@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.2
+	BasicLuas Ver. 18.3
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -76,6 +76,11 @@ local sets = {
 		-- Main = 'Bronze Axe',
 		-- Sub = 'Maple Shield'
 	},
+	
+	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
+		--Main = 'Dark staff',
+		--Sub = '';
+	},
 
 --Ammos to cycle through
 	--Bow
@@ -92,11 +97,6 @@ local sets = {
 	Ammo_NoRanged = {
 		-- Range = '',
 		-- Ammo = 'Bomb Core',
-	},
-
-	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
-		-- Main = 'Dark staff',
-		-- Sub = '';
 	},
 
 --Idle sets
@@ -138,6 +138,7 @@ local sets = {
 --Weaponskill sets
     Ws_Default = {},
 	Ws_Acc = {},
+	Ws_Elemental = {},
 	Ws_Hybrid = {},
 	Ei = {--STR:40% INT:40% Magical Shadow (Obi will equip if Dark weather/day)
 	},
@@ -422,7 +423,7 @@ profile.HandlePrecast = function()
 end
 
 profile.HandleMidcast = function()
-	local player = AshitaCore:GetMemoryManager():GetPlayer();
+	local player = gData.GetPlayer();
     local weather = gData.GetEnvironment();
     local spell = gData.GetAction();
 
@@ -432,6 +433,9 @@ profile.HandleMidcast = function()
         gFunc.EquipSet(sets.Nuke);
 		if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 			obiLib:Evaluate(0.1);
+		end
+		if (spell.MppAftercast <= 50) then
+			gFunc.Equip('Neck', 'Uggalepih Pendant')
 		end
     elseif (spell.Skill == 'Dark Magic') then
 		if (string.contains(spell.Name, 'Aspir') or string.contains(spell.Name, 'Drain')) then
@@ -451,6 +455,9 @@ profile.HandleMidcast = function()
             gFunc.EquipSet(sets.Nuke);
 			if (spell.Element == weather.WeatherElement) or (spell.Element == weather.DayElement) then
 				obiLib:Evaluate(0.1);
+			end
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
 			end
         else
             gFunc.EquipSet(sets.Macc);
@@ -484,12 +491,12 @@ profile.HandleMidshot = function()
 end
 
 profile.HandleWeaponskill = function()
-    local hybrids = T{'Blade: Teki', 'Blade: To', 'Blade: Chi'};
 	local canWS = blinclude.CheckWsBailout();
     if (canWS == false) then
 		gFunc.CancelAction()
 		return;
 	else
+		local player = gData.GetPlayer();
         local ws = gData.GetAction();
     
         gFunc.EquipSet(sets.Ws_Default)
@@ -498,20 +505,28 @@ profile.HandleWeaponskill = function()
 			gFunc.EquipSet(sets.Ws_Acc);
 		end
 		
-		if (hybrids:contains(ws.Name)) then
-			gFunc.EquipSet(sets.Ws_Hybrid)
-		elseif string.match(ws.Name, 'Blade: Ei') then
-            gFunc.EquipSet(sets.Ei)
-			if (weather.WeatherElement == 'Dark') or (weather.DayElement == 'Dark') then
-				obiLib:Evaluate(0.1);
-			end
-	    elseif string.match(ws.Name, 'Blade: Jin') then
+	    if string.match(ws.Name, 'Blade: Jin') then
             gFunc.EquipSet(sets.Jin)
 		elseif string.match(ws.Name, 'Blade: Ten') then
             gFunc.EquipSet(sets.Ten)
 		elseif string.match(ws.Name, 'Blade: Ku') then
             gFunc.EquipSet(sets.Ku)
-        end
+		elseif (blinclude.elementalWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Elemental)
+			if string.match(ws.Name, 'Blade: Ei') then
+				if (weather.WeatherElement == 'Dark') or (weather.DayElement == 'Dark') then
+					obiLib:Evaluate(0.1);
+				end
+			end
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		elseif (blinclude.hybridWS:contains(ws.Name)) then
+			gFunc.EquipSet(sets.Ws_Hybrid)
+			if (player.MPP <= 50) then
+				gFunc.Equip('Neck', 'Uggalepih Pendant')
+			end
+		end
     end
 end
 
