@@ -6,7 +6,7 @@
 local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
---local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -208,8 +208,6 @@ local Settings = {
 	FastCast = (0 + 0); -- Your total Fast Cast (Traits + Gear in precast)
 	Snapshot = (0 + 0); -- Your total Snapshot (Traits + Gear in preshot)
 	
-	SorcerersRing = false; -- set to true if you want to automatically use Sorcerer's Ring when HP < 75% and TP < 1000%.
-	
 	Lockstyle = true; -- set to true for lockstyle on load/sj change. Otherwise set to false.
 	LockstyleSet = 0; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
 	
@@ -319,9 +317,9 @@ profile.HandleDefault = function()
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
-				--if (not isTargetTagged()) then
+				if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				--end
+				end
 			elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 				gFunc.EquipSet(sets.TH);
 			end
