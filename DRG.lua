@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.3
+	BasicLuas Ver. 18.4
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -89,14 +89,14 @@ local sets = {
         Neck = {'Peacock Amulet', 'Spike Necklace'},
         Ear1 = {'Coral Earring','Beetle Earring +1'},
         Ear2 = {'Coral Earring','Beetle Earring +1'},
-        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Body = {'Drachen Mail','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Battle Gloves'},
 		Ring1 = {'Rajas Ring', 'Balance Ring'},
 		Ring2 = {'Sniper\'s Ring','Balance Ring'},
-        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
         Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
-        Legs = {'Republic Subligar'},
-        Feet = {'Drachen Brais','Federation Gaiters','Ctr. Greaves'},
+        Legs = {'Drachen Brais','Republic Subligar'},
+        Feet = {'Federation Gaiters','Ctr. Greaves'},
 	},
     Resting = { --If you use a weapon for resting, put the weapon in Weapon_Resting.
 	},
@@ -121,16 +121,16 @@ local sets = {
 		Hands = {'Battle Gloves'},
 		Ring1 = {'Rajas Ring', 'Balance Ring'},
 		Ring2 = {'Sniper\'s Ring','Balance Ring'},
-        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
         Waist = {'Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
         Legs = {'Republic Subligar'},
-        Feet = {'Drachen Brais','Federation Gaiters','Ctr. Greaves'},
+        Feet = {'Federation Gaiters','Ctr. Greaves'},
 	},
 	Tp_Acc = {},
-	
-	-- Tp_Night {
-		-- --Head = 'Vampire Mask',
-	-- },
+	Tp_Def = {},
+	Tp_Night = {
+		--Head = 'Vampire Mask',
+	},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -161,10 +161,10 @@ local sets = {
 		Hands = {'Custom M Gloves'},
 		Ring1 = {'Rajas Ring', 'Courage Ring'},
 		Ring2 = {'Sniper\'s Ring','Courage Ring'},
-        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
         Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
         Legs = {'Republic Subligar'},
-        Feet = {'Drachen Brais','Federation Gaiters','Ctr. Greaves'},
+        Feet = {'Federation Gaiters','Ctr. Greaves'},
 	},
 	Ws_Acc = {},
 	Ws_Elemental = {},
@@ -178,20 +178,26 @@ local sets = {
 	},
 
 --Ability sets
-    Jumps_Priority = {
+    All_Jumps_Priority = {
 		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
         Ear1 = {'Coral Earring','Beetle Earring +1'},
         Ear2 = {'Coral Earring','Beetle Earring +1'},
-        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Body = {'Barone Corazza','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Custom M Gloves'},
 		Ring1 = {'Rajas Ring', 'Courage Ring'},
 		Ring2 = {'Sniper\'s Ring','Courage Ring'},
-        Back = {'Amemet Mantle','Wolf Mantle +1','Rabbit Mantle'},
+        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
         Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
-        Legs = {'Republic Subligar'},
-        Feet = {'Drachen Brais', 'Volans Greaves', 'Federation Gaiters', 'Ctr. Greaves'},
+        Legs = {'Barone Cosciales','Republic Subligar'},
+        Feet = {'Federation Gaiters', 'Ctr. Greaves'},
+	},
+	Jump_Priority = {
+		Feet = {'Drachen Greaves', 'Volans Greaves'},
+	},
+	High_Jump_Priority = {
+		--Legs = {'Wyrm Brais'},
 	},
 	Angon = {
 		Ammo = 'Angon',
@@ -201,6 +207,11 @@ local sets = {
 	--Drachen Armet is not needed here. It will be equipped on cast with the appropiate subjob when your, or a party member's, HP is low enough.
 	Healing_Breath = { --Will be equipped on breath use.
 		Head = 'Wyrm Armet',
+		Body = 'Wyvern Mail',
+		Legs = 'Drachen Brais',
+	},
+	Steady_Wing = {
+		Legs = 'Drachen Brais',
 	},
     TH = {--/th will force this set to equip for 10 seconds
 	
@@ -405,10 +416,10 @@ profile.HandleDefault = function()
     end
 	
     if (player.Status == 'Engaged') then
-        gFunc.EquipSet(sets.Tp_Default)
+		gFunc.EquipSet(sets.Tp_Default)
 		
-		if blinclude.GetCycle('TpSet') == 'Acc' then
-			gFunc.EquipSet(sets.Tp_Acc)
+		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
+			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
 		
 		if (game.Time < 6.00) or (game.Time > 18.00) then
@@ -470,7 +481,14 @@ profile.HandleAbility = function()
 		return;
 	else
 		if (string.contains(ability.Name, 'Jump')) then
-			gFunc.EquipSet(sets.Jumps);
+			gFunc.EquipSet(sets.All_Jumps);
+			if (string.match(ability.Name, 'Jump')) then
+				gFunc.EquipSet(sets.Jump);
+			elseif (string.match(ability.Name, 'High Jump')) then
+				gFunc.EquipSet(sets.High_Jump);
+			end
+		elseif string.match(ability.Name, 'Steady Wing') then
+			gFunc.EquipSet(sets.Steady_Wing);
 		elseif (ability.Name == 'Angon') then
 			gFunc.EquipSet(sets.Angon);
 		end

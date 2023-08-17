@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.3
+	BasicLuas Ver. 18.4
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -181,6 +181,11 @@ local sets = {
 		Neck = 'Peacock Amulet',
 		Waist = 'Warrior\'s Stone',
 	},
+	Tp_Def_Priority = {
+		Head = 'Genbu\'s Kabuto',
+		Body = 'Kirin\'s Osode',
+		Feet = 'Suzaku\'s Sune-Ate',
+	},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -300,7 +305,13 @@ local sets = {
     TH = {--/th will force this set to equip for 10 seconds
 		--Head = 'Dream Hat +1',
 	},
-    Movement = {},
+    Movement = {
+		Head = { 'Genbu\'s Kabuto' },
+        Body = { 'Kirin\'s Osode' },
+        Hands = { 'Seiryu\'s Kote' },
+        Legs = { 'Byakko\'s Haidate' },
+        Feet = { 'Suzaku\'s Sune-Ate' },
+	},
 	
 --While debuffed sets
 	ImParalyzed = {
@@ -518,11 +529,11 @@ profile.HandleDefault = function()
 	end
 
     if (player.Status == 'Engaged') then
+	
+		gFunc.EquipSet(sets.Tp_Default)
 		
-        gFunc.EquipSet(sets.Tp_Default)
-		
-		if blinclude.GetCycle('TpSet') == 'Acc' then
-			gFunc.EquipSet(sets.Tp_Acc)
+		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
+			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then

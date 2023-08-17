@@ -1,5 +1,5 @@
 --[[
-	SPECIAL TWISST EDITION Ver. 18.3
+	SPECIAL TWISST EDITION Ver. 18.4
 	By Aesk (with much help from the Ashita discord members)
 	
 	DIRECT ALL QUESTIONS ON USAGE TO TWISST.
@@ -190,6 +190,7 @@ local sets = {
 		Ear2 = 'Bone earring +1',
 	},
 	Tp_Acc = {},
+	Tp_Def = {},
 	
 	Tp_HighMP = {
 		Head = 'Optical Hat',
@@ -964,8 +965,8 @@ profile.HandleDefault = function()
 		if (player.Status == 'Engaged') then
 			gFunc.EquipSet(sets.Tp_Default)
 			
-			if blinclude.GetCycle('TpSet') == 'Acc' then
-				gFunc.EquipSet(sets.Tp_Acc)
+			if (blinclude.GetCycle('TpSet') ~= 'Default') then 
+				gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 			end
 			
 			if (blinclude.GetCycle('TH') ~= 'none') then

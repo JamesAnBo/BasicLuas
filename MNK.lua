@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.3
+	BasicLuas Ver. 18.4
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -98,6 +98,7 @@ local sets = {
 --Engaged sets
     Tp_Default = {},
 	Tp_Acc = {},
+	Tp_Def = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -293,10 +294,10 @@ profile.HandleDefault = function()
 	end
     
     if (player.Status == 'Engaged') then
-        gFunc.EquipSet(sets.Tp_Default);
+		gFunc.EquipSet(sets.Tp_Default)
 		
-		if blinclude.GetCycle('TpSet') == 'Acc' then
-			gFunc.EquipSet(sets.Tp_Acc)
+		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
+			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
 		
         if (counterstance >= 1) then gFunc.EquipSet(sets.Counterstance) end

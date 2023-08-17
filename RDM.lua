@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.3
+	BasicLuas Ver. 18.4
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -350,10 +350,10 @@ profile.HandleDefault = function()
 	end
 	
     if (player.Status == 'Engaged') then
-        gFunc.EquipSet(sets.Tp_Default)
+		gFunc.EquipSet(sets.Tp_Default)
 		
-		if blinclude.GetCycle('TpSet') == 'Acc' then
-			gFunc.EquipSet(sets.Tp_Acc)
+		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
+			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then

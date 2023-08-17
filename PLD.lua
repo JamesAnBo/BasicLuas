@@ -1,9 +1,7 @@
 --[[
-	BasicLuas Ver. 18.3
+	BasicLuas Ver. 18.4
 	By Aesk (with much help from the Ashita discord members)
 ]]--
-
-
 
 local profile = {};
 
@@ -98,6 +96,7 @@ local sets = {
     Dt = {},
     Tp_Default = {},
 	Tp_Acc = {},
+	Tp_Def = {},
 
 --These will overwrite any above TP profile.Sets if /tankset is used
     Tank_PDT = {},--Default Tanking,  dt 
@@ -310,10 +309,10 @@ profile.HandleDefault = function()
 	end
 
     if (player.Status == 'Engaged') then
-        gFunc.EquipSet(sets.Tp_Default)
+		gFunc.EquipSet(sets.Tp_Default)
 		
-		if blinclude.GetCycle('TpSet') == 'Acc' then
-			gFunc.EquipSet(sets.Tp_Acc)
+		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
+			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
