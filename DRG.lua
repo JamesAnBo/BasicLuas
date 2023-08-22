@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.4
+	BasicLuas Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -87,9 +87,9 @@ local sets = {
 		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Beetle Earring +1'},
-        Body = {'Drachen Mail','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Battle Gloves'},
 		Ring1 = {'Rajas Ring', 'Balance Ring'},
 		Ring2 = {'Sniper\'s Ring','Balance Ring'},
@@ -115,9 +115,9 @@ local sets = {
 		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Beetle Earring +1'},
-        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Battle Gloves'},
 		Ring1 = {'Rajas Ring', 'Balance Ring'},
 		Ring2 = {'Sniper\'s Ring','Balance Ring'},
@@ -128,6 +128,7 @@ local sets = {
 	},
 	Tp_Acc = {},
 	Tp_Def = {},
+	Tp_Eva = {},
 	Tp_Night = {
 		--Head = 'Vampire Mask',
 	},
@@ -155,9 +156,9 @@ local sets = {
 		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Beetle Earring +1'},
-        Body = {'Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Custom M Gloves'},
 		Ring1 = {'Rajas Ring', 'Courage Ring'},
 		Ring2 = {'Sniper\'s Ring','Courage Ring'},
@@ -182,9 +183,9 @@ local sets = {
 		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Beetle Earring +1'},
-        Body = {'Barone Corazza','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Barone Corazza','Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Custom M Gloves'},
 		Ring1 = {'Rajas Ring', 'Courage Ring'},
 		Ring2 = {'Sniper\'s Ring','Courage Ring'},
@@ -283,7 +284,7 @@ local Settings = {
 	MacroSets = { --  ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
 		[1] = 0, --WAR
 		[2] = 0, --MNK
-		[3] = 6, --WHM
+		[3] = 0, --WHM
 		[4] = 0, --BLM
 		[5] = 0, --RDM
 		[6] = 0, --THF
@@ -559,6 +560,7 @@ profile.HandleWeaponskill = function()
     else
 		local player = gData.GetPlayer();
         local ws = gData.GetAction();
+		local weather = gData.GetEnvironment();
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)

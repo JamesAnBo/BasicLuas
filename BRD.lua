@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.4
+	BasicLuas Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -121,6 +121,7 @@ local sets = {
     Tp_Default = {},
 	Tp_Acc = {},
 	Tp_Def = {},
+	Tp_Eva = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.

@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.4
+	BasicLuas Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -186,6 +186,7 @@ local sets = {
 		Body = 'Kirin\'s Osode',
 		Feet = 'Suzaku\'s Sune-Ate',
 	},
+	Tp_Eva_Priority = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -220,7 +221,7 @@ local sets = {
         Ear1 = {'Bushinomimi'},
         Ear2 = {'Coral Earring'},
         Body = {'Hecatomb Harness', 'Haubergeon'},
-        Hands = {'Thick Mufflers'},
+        Hands = {'Warrior\'s Mufflers','Thick Mufflers'},
         Ring1 = {'Rajas Ring'},
         Ring2 = {'Sniper\'s Ring'},
         Back =  {'Amemet Mantle +1'},
@@ -244,7 +245,7 @@ local sets = {
         Head = 'Celata',
         Neck = 'Spike Necklace',
         Body = 'Kirin\'s Osode',
-        Hands = 'Fighter\'s Mufflers',
+        Hands = 'Warrior\'s Mufflers',
         Ring2 = 'Courage Ring',
 	},
 	Ground_Strike_Priority = {--STR:50% INT:50% 1-hit fTP 1.50/1.75/3.00 Breeze/Thunder/Aqua/Snow
@@ -253,7 +254,7 @@ local sets = {
         Head = 'Wyvern Helm',
         Neck = 'Spike Necklace',
         Body = 'Kirin\'s Osode',
-        Hands = 'Fighter\'s Mufflers',
+        Hands = 'Warrior\'s Mufflers',
         Ring2 = 'Courage Ring',
 	},
 	Rampage_Priority = {--STR:50% 5-hit Crit Soil
@@ -271,14 +272,14 @@ local sets = {
         Head = 'Genbu\'s Kabuto',
 		Neck = 'Fortitude Torque',
         Body = 'Kirin\'s Osode',
-        Hands = 'Fighter\'s Mufflers',
+        Hands = 'Warrior\'s Mufflers',
 		Ring2 = 'Flame Ring',
     },
 	Steel_Cyclone_SA_Priority = {
         Head = 'Genbu\'s Kabuto',
         Neck = 'Fortitude Torque',
         Body = 'Kirin\'s Osode',
-        Hands = 'Fighter\'s Mufflers',
+        Hands = 'Warrior\'s Mufflers',
         Ring2 = 'Flame Ring',
     },
 	
@@ -678,6 +679,7 @@ profile.HandleWeaponskill = function()
     else
 		local player = gData.GetPlayer();
 		local ws = gData.GetAction();
+		local weather = gData.GetEnvironment();
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)

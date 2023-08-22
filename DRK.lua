@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.4
+	BasicLuas Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -131,6 +131,7 @@ local sets = {
     Tp_Default = {},
 	Tp_Acc = {},
 	Tp_Def = {},
+	Tp_Eva = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -578,6 +579,7 @@ profile.HandleWeaponskill = function()
     else
 		local player = gData.GetPlayer();
         local ws = gData.GetAction();
+		local weather = gData.GetEnvironment();
         local sa = gData.GetBuffCount('Sneak Attack');
     
         gFunc.EquipSet(sets.Ws_Default)

@@ -1,4 +1,4 @@
---BasicLuas Ver. 18.3
+--BasicLuas Ver. 18.5
 --By Aesk (with much help from the Ashita discord members)
 
 --[[
@@ -197,7 +197,7 @@ function blinclude.SetVariables()
 	blinclude.CreateToggle('Kite', false);
 	blinclude.CreateToggle('Debug', false);
 	blinclude.CreateToggle('SIR', false);
-	blinclude.CreateCycle('TpSet', {[1] = 'Default', [2] = 'Acc', [3] = 'Def'});
+	blinclude.CreateCycle('TpSet', {[1] = 'Default', [2] = 'Acc', [3] = 'Def', [4] = 'Eva'});
 	blinclude.CreateCycle('IdleSet', {[1] = 'Default', [2] = 'Defense', [3] = 'Refresh', [4] = 'Regen'});
 	if (player.MainJob == 'RDM') or (player.MainJob == 'BLM') then
 		blinclude.CreateToggle('HighMP', false);

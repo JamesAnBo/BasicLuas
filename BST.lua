@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.4
+	BasicLuas Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -100,6 +100,7 @@ local sets = {
 	Tp_Default = {},
 	Tp_Acc = {},
 	Tp_Def = {},
+	Tp_Eva = {},
 	Pet_Tp_Hybrid = {},
     Pet_Only_Tp = {},
 

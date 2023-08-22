@@ -1,5 +1,5 @@
 --[[
-	SPECIAL TWISST EDITION Ver. 18.4
+	SPECIAL TWISST EDITION Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 	
 	DIRECT ALL QUESTIONS ON USAGE TO TWISST.
@@ -191,6 +191,7 @@ local sets = {
 	},
 	Tp_Acc = {},
 	Tp_Def = {},
+	Tp_Eva = {},
 	
 	Tp_HighMP = {
 		Head = 'Optical Hat',
@@ -1128,6 +1129,7 @@ profile.HandleWeaponskill = function()
 		return;
     else
 		local player = gData.GetPlayer();
+		local weather = gData.GetEnvironment();
     
         gFunc.EquipSet(sets.Ws_Default)
 		

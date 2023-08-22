@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.4
+	BasicLuas Ver. 18.5
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -192,6 +192,7 @@ local sets = {
 		},
 	Tp_Acc = {},
 	Tp_Def = {},
+	Tp_Eva = {},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -702,6 +703,7 @@ profile.HandleWeaponskill = function()
 	local unlimitedshot = gData.GetBuffCount('Unlimited Shot');
 	local ammo = gData.GetEquipment().Ammo;
     local canWS = blinclude.CheckWsBailout();
+	local weather = gData.GetEnvironment();
 	
     if (unlimitedshot <= 0) and (LimitedAmmo:contains(ammo.Name)) and (blinclude.DistanceWS:contains(ws.Name)) then
 		print(chat.header('BasicLuas'):append(chat.warning(ammo.Name..' is equipped without Unlimited shot. Canceled WS.')));
