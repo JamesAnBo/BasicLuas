@@ -9,7 +9,7 @@ local blkeybinds = T{};
 /dt				-Toggle damage taken set (fulltime)
 /th				-Toggle treasure hunter set (combines with TP set)
 /kite			-Equip movement set (fulltime)
-/tpset			-Cycles tp/ws sets
+/tpset			-Cycles tp/ws/def/eva sets
 /idleset		-Cycles idle sets
 /bldrain		-Cast your highest tier Drain spell
 /warpme			-Equip warp item (specified in blsettings.lua) and use it
@@ -50,7 +50,6 @@ local binds = T{
 	['^F8'] = 'fillmode',
 	['^F9'] = 'dt',
 	['^F10'] = 'th',
-	['!F12'] = 'tpset',
 	['^F12'] = 'idleset',
 	['@F12'] = 'warpme',
 	['@C'] = 'craftset',
@@ -59,6 +58,7 @@ local binds = T{
 	['@X'] = 'xpring',
 	['@D'] = 'disable',
 	['@W'] = 'weapon',
+	['@T'] = 'tpset',
 	['@R'] = 'ranged',
 	['@A'] = 'ammo',
 	['F10'] = 'modes',
