@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.5
+	BasicLuas Ver. 18.6
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -7,6 +7,7 @@ local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local conquest = gFunc.LoadFile('common\\conquest.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -84,10 +85,26 @@ local sets = {
 
 --Idle sets
 	
-    Idle_Default = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
+    Idle_Default_Priority = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
+        Main = {'Solid Wand','Yew Wand +1'},
+        Sub = {'Hatchling Shield'},
+        Ammo = {'Fortune Egg'},
+        Head = {'Baron\'s Chapeau'},
+        Neck = {'Justice Badge'},
+        Ear1 = {'Energy Earring'},
+        Ear2 = {'Energy Earring'},
+        Body = {'Baron\'s Saio'},
+        Hands = {'Devotee\'s Mitts'},
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
+        Back = {'White Cape +1','Wizard\'s Mantle'},
+        Waist = {'Mrc.Cpt. Belt'},
+        Legs = {'Custom Slacks','Baron\'s Slops'},
+        Feet = {'Custom M Boots'},
 	},
     Resting = { --If you use a weapon for resting, put the weapon in Weapon_Resting.
 		Legs = 'Baron\'s Slops',
+		Back = 'Wizard\'s Mantle',
 	},
     Idle_Regen = {},
     Idle_Refresh = {},
@@ -101,8 +118,8 @@ local sets = {
 
 --Engaged sets
     Tp_Default = {
-        Ring1 = 'Balance Ring',
-        Ring2 = 'Balance Ring',
+        --Ring1 = 'Balance Ring',
+        --Ring2 = 'Balance Ring',
 	},
 	Tp_Acc = {},
 	Tp_Eva = {},
@@ -123,10 +140,23 @@ local sets = {
 	--Healing sets
     Cure = {
 		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
         Ring1 = 'Saintly Ring',
         Ring2 = 'Saintly Ring',
+		Back = 'White Cape +1',
+		Waist = 'Friar\'s Rope',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
     Self_Cure = {   
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
+		Back = 'White Cape +1',
+		Waist = 'Friar\'s Rope',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
     Regen = {},
     Cursna = {},
@@ -137,6 +167,14 @@ local sets = {
     Self_Enhancing = {
 	},
     Stoneskin = {
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
+		Back = 'White Cape +1',
+		Waist = 'Friar\'s Rope',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
     Phalanx = {
 	},
@@ -148,13 +186,23 @@ local sets = {
 	},
 	DebuffMND = {
 		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
         Ring1 = 'Saintly Ring',
         Ring2 = 'Saintly Ring',
+		Back = 'White Cape +1',
+		Waist = 'Friar\'s Rope',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
 	DebuffINT = {
 		Head = 'Baron\'s Chapeau',
+		Hands = 'Custom M Gloves',
         Ring1 = 'Eremite\'s Ring',
         Ring2 = 'Eremite\'s Ring',
+		Back = 'Black Cape +1',
+		Waist = 'Mrc.Cpt. Belt',
+		Legs = 'Custom Slacks',
+		Feet = 'Custom M Boots',
 	},
 	ElementalDebuff = {},
 
@@ -166,8 +214,13 @@ local sets = {
 	--Nuking sets
     Nuke = {
 		Head = 'Baron\'s Chapeau',
+		Hands = 'Custom M Gloves',
         Ring1 = 'Eremite\'s Ring',
         Ring2 = 'Eremite\'s Ring',
+		Back = 'Black Cape +1',
+		Waist = 'Mrc.Cpt. Belt',
+		Legs = 'Custom Slacks',
+		Feet = 'Custom M Boots',
 	},
     NukeACC = {
 	},
@@ -356,6 +409,13 @@ profile.HandleDefault = function()
 		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
 			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
+		
+		-- if conquest:GetInsideControl() then
+			-- --if inside nation controlled region
+		-- end
+		-- if conquest:GetOutsideControl() then
+			-- --if outside nation controlled region
+		-- end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 

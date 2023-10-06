@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.5
+	BasicLuas Ver. 18.6
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -7,6 +7,7 @@ local profile = {};
 
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local conquest = gFunc.LoadFile('common\\conquest.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -65,15 +66,16 @@ Example_set_Priority = {
 ]]--
 
 local sets = {
-	Weapon_Default = {}; --Put your idle weapon in here, or leave this blank if you don't want a default idle weapon.
+	Weapon_Default_Priority = {
+		
+	}; --Put your idle weapon in here, or leave this blank if you don't want a default idle weapon.
 	
 --Weapons to cycle through
-	Weapon_One = {
-		Main = 'Oak Staff',
+	Weapon_One_Priority = {
+		Main = {'Orichalcum Lance','Ice Lance','Martial Lance','Cermet Lance','Gnd.Kgt. Lance','Holy Lance','Mythril Lance +1','Peregrine'},
 	},
 	Weapon_Two = {
-		Main = 'Bronze Axe',
-		Sub = 'Maple Shield'
+		Main = 'Bourdonasse',
 	},
 	
 	Weapon_Resting = {--This will equip while resting if weapon mode is 'Default'.
@@ -84,53 +86,93 @@ local sets = {
 --Idle sets
 
     Idle_Default_Priority = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
-		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
-        Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
+		Ammo = {'Tiphia Sting','Balm Sachet', 'Happy Egg'},
+        Head = {'Wyvern Helm', 'Drachen Armet', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Body = {'Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
-		Hands = {'Battle Gloves'},
+        Ear1 = {'Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Brutal Earring','Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Barone Corazza','Drachen Mail','Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+		Hands = {'Wyrm Fng.Gnt.','Drachen Fng. Gnt.','Battle Gloves'},
 		Ring1 = {'Rajas Ring', 'Balance Ring'},
 		Ring2 = {'Sniper\'s Ring','Balance Ring'},
-        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
+        Back = {'Amemet Mantle +1','Beak Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
         Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
-        Legs = {'Drachen Brais','Republic Subligar'},
-        Feet = {'Federation Gaiters','Ctr. Greaves'},
+        Legs = {'Wyrm Brais','Drachen Brais','Republic Subligar'},
+        Feet = {'Homam Gambieras','Feral Ledelsens','Drachen Greaves','Federation Gaiters','Ctr. Greaves'}, --'Wyrm Greaves',
 	},
-    Resting = { --If you use a weapon for resting, put the weapon in Weapon_Resting.
+    Resting_Priority = { --If you use a weapon for resting, put the weapon in Weapon_Resting.
 	},
-    Idle_Regen = {},
+	Resting_Pet_Priority = {
+		Body = {'Drachen Mail','Wyvern Mail'},
+		Feet = {'Wyrm Greaves'},
+	},
+    Idle_Regen = {
+		Body = 'Barone Corazza',
+	},
     Idle_Refresh = {},
-	Idle_Defense = {},
-    Town = {},
+    Idle_Defense = {
+        Main = 'Orichalcum Lance',
+        Ammo = 'Happy Egg',
+        Head = 'Wyvern Helm',
+        Neck = 'Fortitude Torque',
+        Ear1 = 'Merman\'s Earring',
+        Ear2 = 'Merman\'s Earring',
+        Body = 'Barone Corazza',
+        Hands = 'Wyrm Fng.Gnt.',
+        Ring1 = 'Coral Ring',
+        Ring2 = 'Coral Ring',
+        Back = 'Amemet Mantle +1',
+        Waist = 'Warwolf Belt',
+        Legs = 'Wyrm Brais',
+        Feet = 'Homam Gambieras',
+    },
+    Town_Priority = {},
 	
 --Defense sets
 	Dt = {},
 	Pet_Dt = {},
-	Pet_HP = {},
+	Pet_HP = {
+		Body = 'Wyvern Mail',
+		Hands = 'Ostreger Mitts',
+		Legs = 'Drachen Brais',
+		Feet = 'Homam Gambieras',
+	},
 	
 --Engaged sets
     Tp_Default_Priority = {
-		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
+		Ammo = {'Tiphia Sting','Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Body = {'Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
-		Hands = {'Battle Gloves'},
+        Ear1 = {'Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Brutal Earring','Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Barone Corazza','Assault Jerkin','Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+		Hands = {'Dusk Gloves','Battle Gloves'},
 		Ring1 = {'Rajas Ring', 'Balance Ring'},
 		Ring2 = {'Sniper\'s Ring','Balance Ring'},
-        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
+        Back = {'Amemet Mantle +1','Beak Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
         Waist = {'Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
-        Legs = {'Republic Subligar'},
-        Feet = {'Federation Gaiters','Ctr. Greaves'},
+        Legs = {'Barone Cosciales','Feral Trousers','Republic Subligar'},
+        Feet = {'Homam Gambieras','Dusk Ledelsens','Feral Ledelsens','Federation Gaiters','Ctr. Greaves'},
 	},
-	Tp_Acc = {},
-	Tp_Def = {},
-	Tp_Eva = {},
-	Tp_Night = {
-		--Head = 'Vampire Mask',
+	Tp_Acc_Priority = {
+        Head = {'Optical Hat'},
+        Neck = {'Peacock Amulet'},
+        Body = {'Scp. Harness +1'},
+		Hands = {'Wyrm Fng.Gnt.','Battle Gloves'},
+		Ring2 = {'Sniper\'s Ring'},
+        Waist = {'Life Belt'},
+        Legs = {'Drachen Brais'},
+	},
+	Tp_Def_Priority = {
+		Head = {'Wyvern Helm'},
+		Body = {'Barone Corazza'},
+		Ear1 = {'Ethereal Earring','Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+	},
+	Tp_Eva_Priority = {
+		Body = {'Scp. Harness +1'},
+	},
+	HPP_75_Priority = {
+		Hands = {'Dusk Gloves','Cpc. Gauntlets +1','Battle Gloves'},
 	},
 
 --Precast sets (Fast Cast + Casting time reduction)
@@ -149,29 +191,38 @@ local sets = {
 --Ranged sets
 	--Put your total Snapshot in the settings below.
     Preshot = {},
-    Midshot = { },
+    Midshot = {},
 
 --Weaponskill sets
     Ws_Default_Priority = {
-		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
-        Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
+		Ammo = {'Tiphia Sting','Balm Sachet', 'Happy Egg'},
+        Head = {'Wyvern Helm','Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Body = {'Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
+        Ear1 = {'Bushinomimi','Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Brutal Earring','Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Body = {'Hecatomb Harness','Assault Jerkin','Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Custom M Gloves'},
 		Ring1 = {'Rajas Ring', 'Courage Ring'},
-		Ring2 = {'Sniper\'s Ring','Courage Ring'},
-        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
-        Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
-        Legs = {'Republic Subligar'},
-        Feet = {'Federation Gaiters','Ctr. Greaves'},
+		Ring2 = {'Flame Ring','Victory Ring','Sniper\'s Ring','Courage Ring'},
+        Back = {'Amemet Mantle +1','Beak Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
+        Waist = {'Warwolf Belt','Life Belt','Tilt Belt','Brave Belt'},
+        Legs = {'Barone Cosciales','Feral Trousers','Republic Subligar'},
+        Feet = {'Hct. Leggings','Feral Ledelsens','Federation Gaiters','Ctr. Greaves'},
 	},
 	Ws_Acc = {},
 	Ws_Elemental = {},
 	Ws_Hybrid = {},
 	Ws_Default_SA = {},
     Penta_Thrust = {--STR:20% DEX:20% 5-hit Acc Shadow
+	},
+	Vorpal_Thrust = {
+		Neck = 'Light Gorget',
+	},
+	Skewer = {
+		Neck = 'Light Gorget',
+	},
+	Wheeling_Thrust = {
+		Neck = 'Light Gorget',
 	},
 	Impulse_Drive = {--STR:100% 2-hit fTP: 1.00/1.50/2.50 Shadow/Soil/Snow
 	},
@@ -180,39 +231,53 @@ local sets = {
 
 --Ability sets
     All_Jumps_Priority = {
-		Ammo = {'Bomb Core', 'Balm Sachet', 'Happy Egg'},
+		Ammo = {'Tiphia Sting','Balm Sachet', 'Happy Egg'},
         Head = {'Optical Hat', 'Walkure Mask', 'Mrc.Cpt. Headgear','Beetle Mask +1'},
         Neck = {'Peacock Amulet', 'Spike Necklace'},
-        Ear1 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
-        Ear2 = {'Coral Earring','Spike Earring','Beetle Earring +1'},
+        Ear1 = {'Merman\'s Earring','Spike Earring','Beetle Earring +1'},
+        Ear2 = {'Brutal Earring','Merman\'s Earring','Spike Earring','Beetle Earring +1'},
         Body = {'Barone Corazza','Scp. Harness +1','Brigandine','Mrc.Cpt. Doublet','Bettle Harness +1'},
 		Hands = {'Custom M Gloves'},
 		Ring1 = {'Rajas Ring', 'Courage Ring'},
 		Ring2 = {'Sniper\'s Ring','Courage Ring'},
-        Back = {'Amemet Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
-        Waist = {'Warwolf Belt','Swift Belt','Life Belt','Tilt Belt','Brave Belt'},
-        Legs = {'Barone Cosciales','Republic Subligar'},
-        Feet = {'Federation Gaiters', 'Ctr. Greaves'},
+        Back = {'Amemet Mantle +1','Beak Mantle +1','Wolf Mantle +1','Rabbit Mantle'},
+        Waist = {'Warwolf Belt','Life Belt','Tilt Belt','Brave Belt'},
+        Legs = {'Barone Cosciales','Feral Trousers','Republic Subligar'},
+        Feet = {'Homam Gambieras','Feral Ledelsens','Federation Gaiters', 'Ctr. Greaves'},
 	},
 	Jump_Priority = {
 		Feet = {'Drachen Greaves', 'Volans Greaves'},
 	},
 	High_Jump_Priority = {
-		--Legs = {'Wyrm Brais'},
+		Legs = {'Wyrm Brais'},
 	},
 	Angon = {
 		Ammo = 'Angon',
 	},
 
 --Other sets
-	--Drachen Armet is not needed here. It will be equipped on cast with the appropiate subjob when your, or a party member's, HP is low enough.
+	Breath_Trigger = { -- Equipped in midcast
+		Head = 'Drachen Armet',
+		Body = 'Scp. Harness +1',
+		Hands = 'Dusk Gloves',
+		Ear1 = 'Ethereal Earring',
+		Ring2 = 'Bomb Queen Ring',
+		Feet = 'Homam Gambieras',
+	},
 	Healing_Breath = { --Will be equipped on breath use.
 		Head = 'Wyrm Armet',
 		Body = 'Wyvern Mail',
 		Legs = 'Drachen Brais',
+		Feet = 'Homam Gambieras',
 	},
 	Steady_Wing = {
+		Body = 'Wyvern Mail',
+		Hands = 'Ostreger Mitts',
 		Legs = 'Drachen Brais',
+		Feet = 'Homam Gambieras',
+	},
+	Call_Wyvern = {
+		Body = 'Wyem Mail',
 	},
     TH = {--/th will force this set to equip for 10 seconds
 	
@@ -240,30 +305,14 @@ local sets = {
         -- Ear1 = 'Remove',
         -- Ear2 = 'Remove',
         -- Body = 'Remove',
-        -- Hands = 'Remove',
+        Hands = 'Dusk Gloves',
         -- Ring1 = 'Remove',
         -- Ring2 = 'Remove',
         -- Back = 'Remove',
         -- Waist = 'Remove',
         -- Legs = 'Remove',
-        -- Feet = 'Remove',
+        Feet = 'Dusk Ledelsens',
 	},
-    ['export'] = {
-        Main = 'Lance +1',
-        Ammo = 'Balm Sachet',
-        Head = 'Mrc.Cpt. Headgear',
-        Neck = 'Peacock Amulet',
-        Ear1 = 'Beetle Earring +1',
-        Ear2 = 'Beetle Earring +1',
-        Body = 'Mrc.Cpt. Doublet',
-        Hands = 'Battle Gloves',
-        Ring1 = 'Rajas Ring',
-        Ring2 = 'Balance Ring',
-        Back = 'Wolf Mantle +1',
-        Waist = 'Brave Belt',
-        Legs = 'Republic Subligar',
-        Feet = 'Volans Greaves',
-    },
 };
 profile.Sets = sets;
 
@@ -277,24 +326,24 @@ local Settings = {
 	Snapshot = (0 + 0); -- Your total Snapshot (Traits + Gear in preshot)
 	
 	Lockstyle = true; -- set to true for lockstyle on load/sj change. Otherwise set to false.
-	LockstyleSet = 18; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
+	LockstyleSet = 4; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
 	
 	Macros = true; -- set to true for macro book and macro set changes on load/sj change.
 	MacroBook = 14; -- The macro book you want for this job. Otherwise set to false.
 	MacroSets = { --  ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
-		[1] = 0, --WAR
+		[1] = 2, --WAR
 		[2] = 0, --MNK
-		[3] = 0, --WHM
+		[3] = 5, --WHM
 		[4] = 0, --BLM
-		[5] = 0, --RDM
-		[6] = 0, --THF
+		[5] = 6, --RDM
+		[6] = 4, --THF
 		[7] = 0, --PLD
 		[8] = 0, --DRK
 		[9] = 0, --BST
 		[10] = 0, --BRD
 		[11] = 0, --RNG
-		[12] = 0, --SAM
-		[13] = 0, --NIN
+		[12] = 1, --SAM
+		[13] = 3, --NIN
 		[14] = 0, --DRG
 		[15] = 0, --SMN
 	};
@@ -401,7 +450,9 @@ profile.HandleDefault = function()
 	UpdateSubJob()
 	local game = gData.GetEnvironment();
 	local player = gData.GetPlayer();
+	local pet = gData.GetPet();
 	local petAction = gData.GetPetAction();
+	
 	
 	if (player.Status ~= 'Resting') then
 		if (blinclude.GetCycle('Weapon') ~= 'Default') then 
@@ -422,11 +473,18 @@ profile.HandleDefault = function()
 		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
 			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
-		
-		if (game.Time < 6.00) or (game.Time > 18.00) then
-			gFunc.EquipSet(sets.Tp_Night)
+
+		if (player.HPP <= 75) then
+			gFunc.EquipSet(sets.HPP_75)
 		end
-		
+
+		-- if conquest:GetInsideControl() then
+			-- --if inside nation controlled region
+		-- end
+		-- if conquest:GetOutsideControl() then
+			-- --if outside nation controlled region
+		-- end
+
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
 				if (not isTargetTagged()) then
@@ -440,6 +498,11 @@ profile.HandleDefault = function()
         gFunc.EquipSet(sets.Resting);
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.EquipSet(sets.Weapon_Resting);
+		end
+		if (pet ~= nil) then
+			if (pet.HPP < 75) then
+				gFunc.EquipSet(sets.Resting_Pet);
+			end
 		end
     elseif (player.IsMoving == true) then
 		gFunc.EquipSet(sets.Movement);
@@ -473,6 +536,8 @@ profile.HandleDefault = function()
 end
 
 profile.HandleAbility = function()
+	local party = AshitaCore:GetMemoryManager():GetParty();
+	local player = gData.GetPlayer();
     local ability = gData.GetAction();
 	local canJA = blinclude.CheckAbilityBailout();
     if (blinclude.GetToggle('JACancel') == true) and  (canJA == false) then
@@ -483,9 +548,13 @@ profile.HandleAbility = function()
 	else
 		if (string.contains(ability.Name, 'Jump')) then
 			gFunc.EquipSet(sets.All_Jumps);
+			if (player.HPP <= 75) then
+				gFunc.EquipSet(sets.HPP_75)
+			end
 			if (string.match(ability.Name, 'Jump')) then
 				gFunc.EquipSet(sets.Jump);
-			elseif (string.match(ability.Name, 'High Jump')) then
+			end
+			if (string.match(ability.Name, 'High Jump')) then
 				gFunc.EquipSet(sets.High_Jump);
 			end
 		elseif string.match(ability.Name, 'Steady Wing') then
@@ -536,9 +605,9 @@ profile.HandleMidcast = function()
     elseif (spell.Skill == 'Enhancing Magic') then
         gFunc.EquipSet(sets.Enhancing);
     end
-	if checkPartyHPP() then
-		gFunc.Equip('Head', 'Drachen Armet');
-	end
+	--if checkPartyHPP() then
+		gFunc.EquipSet(sets.Breath_Trigger);
+	--end
 	if (blinclude.GetCycle('TH') ~= 'none') then gFunc.EquipSet(sets.TH) end
 end
 
@@ -574,6 +643,12 @@ profile.HandleWeaponskill = function()
         end
         if string.match(ws.Name, 'Penta Thrust') then
             gFunc.EquipSet(sets.Penta_Thrust)
+		elseif string.match(ws.Name, 'Vorpal Thrust') then
+			gFunc.EquipSet(sets.Vorpal_Thrust)
+		elseif string.match(ws.Name, 'Skewer') then
+			gFunc.EquipSet(sets.Skewer)
+		elseif string.match(ws.Name, 'Wheeling Thrust') then
+			gFunc.EquipSet(sets.Wheeling_Thrust)
         elseif string.match(ws.Name, 'Impulse Drive') then
             gFunc.EquipSet(sets.Impulse_Drive)
 			if (sa >= 1) then
