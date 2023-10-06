@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.5
+	BasicLuas Ver. 18.6
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -8,6 +8,7 @@ local profile = {};
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local rangedTable = gFunc.LoadFile('common\\rangedtypes.lua');
 local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local conquest = gFunc.LoadFile('common\\conquest.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -310,7 +311,7 @@ local Settings = {
 	
 	Macros = true; -- set to true for macro book and macro set changes on load/sj change.
 	MacroBook = 6; -- The macro book you want for this job. Otherwise set to false.
-	MacroSets = { --  ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
+	MacroSets = { -- ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
 		[1] = 2, --WAR
 		[2] = 0, --MNK
 		[3] = 0, --WHM
@@ -484,6 +485,13 @@ profile.HandleDefault = function()
 		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
 			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
+		
+		-- if conquest:GetInsideControl() then
+			-- --if inside nation controlled region
+		-- end
+		-- if conquest:GetOutsideControl() then
+			-- --if outside nation controlled region
+		-- end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 

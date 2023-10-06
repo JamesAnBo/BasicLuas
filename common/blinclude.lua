@@ -1,4 +1,4 @@
---BasicLuas Ver. 18.5
+--BasicLuas Ver. 18.6
 --By Aesk (with much help from the Ashita discord members)
 
 --[[
@@ -578,7 +578,16 @@ end
 
 function blinclude.SetTownGear()
 	local zone = gData.GetEnvironment();
-	if (zone.Area ~= nil) and (blinclude.Towns:contains(zone.Area)) then gFunc.EquipSet('Town') end
+	if (zone.Area ~= nil) and (blinclude.Towns:contains(zone.Area)) then 
+		gFunc.EquipSet('Town') 
+	end
+	if T{'Bastok Markets', 'Bastok Mines', 'Port Bastok','Metalworks'}:contains(zone.Area) then
+		gFunc.Equip('Body', 'Republic Aketon');
+	elseif T{'South San d\'Oria', 'North San d\'Oria', 'Port San d\'Oria','Chateau d\'Oraguille'}:contains(zone.Area) then
+		gFunc.Equip('Body', 'Kingdom Aketon');
+	elseif T{'Windurst Walls', 'Windurst Waters', 'Windurst Woods', 'Port Windurst','Heavens Tower'}:contains(zone.Area) then
+		gFunc.Equip('Body', 'Federation Aketon');
+	end
 end
 
 function blinclude.SetRegenRefreshGear()
@@ -754,16 +763,6 @@ function blinclude.CheckCancels()--tossed Stoneskin in here too
 	end
 end
 
-function blinclude.NationAketon()
-    local env = gData.GetEnvironment();
-	if T{'Bastok Markets', 'Bastok Mines', 'Port Bastok','Metalworks'}:contains(env.Area) then
-		gFunc.Equip('Body', 'Republic Aketon');
-	elseif T{'South San d\'Oria', 'North San d\'Oria', 'Port San d\'Oria','Chateau d\'Oraguille'}:contains(env.Area) then
-		gFunc.Equip('Body', 'Kingdom Aketon');
-	elseif T{'Windurst Walls', 'Windurst Waters', 'Windurst Woods', 'Port Windurst','Heavens Tower'}:contains(env.Area) then
-		gFunc.Equip('Body', 'Federation Aketon');
-	end
-end
 
 local function loadMsg()
 	print(chat.header('BasicLuas'):append(chat.message('Press '..tostring(blkeybinds.GetTriggerKey('modes'))..' to see modes again.')))
@@ -772,11 +771,10 @@ end
 function blinclude.CheckDefault()
 	blinclude.SetRegenRefreshGear();
 	blinclude.SetTownGear();
-	blinclude.NationAketon()
     blinclude.CheckCommonDebuffs();
 	blinclude.CheckLockingItems();
 	
-	local player = gData.GetPlayer();
+	--local player = gData.GetPlayer();
 	
 	if (blinclude.CraftSet == true) then gFunc.EquipSet(blsets.sets.Crafting) end
 	if (blinclude.ZeniSet == true) then gFunc.EquipSet(blsets.sets.Zeni) end

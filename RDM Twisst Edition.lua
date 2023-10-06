@@ -1,5 +1,5 @@
 --[[
-	SPECIAL TWISST EDITION Ver. 18.5
+	SPECIAL TWISST EDITION Ver. 18.6
 	By Aesk (with much help from the Ashita discord members)
 	
 	DIRECT ALL QUESTIONS ON USAGE TO TWISST.
@@ -10,6 +10,7 @@ local profile = {};
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local rangedTable = gFunc.LoadFile('common\\rangedtypes.lua');
 local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local conquest = gFunc.LoadFile('common\\conquest.lua');
 
 --If you change the names here, Make sure to change the weapon sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -71,7 +72,6 @@ local sets = {
 	Weapon_Default = {
 	},
 	Weapon_Default_HighMP = {
-	
 	},
 --Weapons to cycle through
 	--Elemental staves will automatically change with spell element if Weapon mode is 'Default'. Change staves in \common\blsets.lua
@@ -97,44 +97,33 @@ local sets = {
 	},	
 	
 --Idle sets
-    Idle_Default = {
-		Head = '',	
-		Body = 'Vermillion Cloak',
-		Ear1 = 'Geist Earring',
-		Ear2 = 'Geist Earring',
-		Hands = 'Errant Cuffs',
-		Ring1 = 'Ether Ring',
-		Ring2 = 'Tamas Ring',
-		Neck = 'Holy Phial',
-		Legs = 'Wise Braconi',
-		Feet = 'Mahatma Pigaches',
-		Waist = 'Hierarch Belt',
+    Idle_Default_Priority = {
+        Main = {'Solid Wand','Yew Wand +1'},
+        Sub = {'Hatchling Shield'},
+        Ammo = {'Fortune Egg'},
+        Head = {'Baron\'s Chapeau'},
+        Neck = {'Justice Badge'},
+        Ear1 = {'Energy Earring'},
+        Ear2 = {'Energy Earring'},
+        Body = {'Baron\'s Saio'},
+        Hands = {'Devotee\'s Mitts'},
+        Ring1 = {'Saintly Ring'},
+        Ring2 = {'Saintly Ring'},
+        Back = {'White Cape +1','Wizard\'s Mantle'},
+        Waist = {'Mrc.Cpt. Belt'},
+        Legs = {'Custom Slacks','Baron\'s Slops'},
+        Feet = {'Custom M Boots'},
 	},
 	
     Resting = {
-		--Main = 'Pluto\'s Staff',  Moved to Weapon_Resting
-		Body = 'Errant Hpl.',
-		Neck = 'Checkered Scarf',
-		Head = 'Warlock\'s Chapeau',
-		Legs = 'Wise Braconi',
+		Legs = 'Baron\'s Slops',
+		Back = 'Wizard\'s Mantle',
 	},
 	
 	
 	Resting_HighMP = {
-        --Main = 'Pluto\'s Staff',	Moved to Weapon_Resting
-        Ammo = 'Phtm. Tathlum',
-        Head = 'Warlock\'s Chapeau',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Body = 'Warlock\'s Tabard',
-        Hands = 'Errant Cuffs',
-        Ring1 = 'Ether Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Hierarch Belt',
-        Legs = 'Wise Braconi',
-        Feet = 'Mahatma Pigaches',
+		Legs = 'Custom Slacks',
+		Back = 'Wizard\'s Mantle',
     },
 	
 	
@@ -149,105 +138,61 @@ local sets = {
 	Idle_Defense = {},
 	
 	
-	Idle_HighMP = {
-	    Main = '',
-        Ammo = '',
-        Head = 'Warlock\'s Chapeau',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Body = 'Warlock\'s Tabard',
-        Hands = 'Errant Cuffs',
-        Ring1 = 'Ether Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Hierarch Belt',
-        Legs = 'Wise Braconi',
-        Feet = 'Mahatma Pigaches',
+	Idle_HighMP_Priority = {
+        Main = {'Solid Wand','Yew Wand +1'},
+        Sub = {'Hatchling Shield'},
+        Ammo = {'Fortune Egg'},
+        Head = {'Baron\'s Chapeau'},
+        Neck = {'Justice Badge'},
+        Ear1 = {'Energy Earring'},
+        Ear2 = {'Energy Earring'},
+        Body = {'Baron\'s Saio'},
+        Hands = {'Devotee\'s Mitts'},
+        Ring1 = {'Astral Ring'},
+        Ring2 = {'Astral Ring'},
+        Back = {'White Cape +1','Wizard\'s Mantle'},
+        Waist = {'Mrc.Cpt. Belt'},
+        Legs = {'Custom Slacks','Baron\'s Slops'},
+        Feet = {'Custom M Boots'},
 	},
 	
     Town = {
-		Body = 'Kingdom Aketon', 
 	},
 	
 --Defense sets
     Dt = {
-		Body = 'Warlock\'s Tabard',
-		Head = 'Warlock\'s chapeau',
 	},
 
 --Engaged sets
     Tp_Default = {
-		Head = 'Optical Hat',
-		Neck = 'Peacock Amulet',
-		Body = 'Cerise Doublet',
-		hands = 'Dusk Gloves',
-		Waist = 'Swift Belt',
-		Back = 'Amemet Mantle',
-		Feet = 'Wise Pigaches',
-		Legs = 'Wise Braconi',
 		Ear1 = 'Bone earring +1',
 		Ear2 = 'Bone earring +1',
+        Ring1 = 'Balance Ring',
+        Ring2 = 'Balance Ring',
 	},
 	Tp_Acc = {},
 	Tp_Def = {},
 	Tp_Eva = {},
 	
-	Tp_HighMP = {
-		Head = 'Optical Hat',
-		Neck = 'Peacock Amulet',
-		Body = 'Cerise Doublet',
-		Back = 'Amemet Mantle',		
-		hands = 'Dusk Gloves',
-		Waist = 'Swift Belt',	
-		Feet = 'Wise Pigaches',
-		Legs = 'Wise Braconi',	
-		Ear1 = 'Bone earring +1',
-		Ear2 = 'Bone earring +1',		
+	Tp_HighMP = {		
 	},
 	
 
 --Precast sets (Fast Cast + Casting time-%) 
 	--Put your total Fast Cast in the settings below.
     Precast = {
-				
-		Body = 'Warlock\'s Tabard',
-		Head = 'Warlock\'s chapeau',
-		Ammo = 'Phtm. Tathlum',
-		hands = '',
-		Waist = 'Swift Belt',
 	},
 	
-	Precast_HighMP = {
-	Head = 'Warlock\'s chapeau',	
+	Precast_HighMP = {	
 	},
 	
     Cure_Precast = {
-		Body = 'Warlock\'s Tabard',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        hands = '',
-        Ring1 = 'Aqua Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Swift Belt',
 	},
 	
     Enhancing_Precast = {
-		Head = 'Warlock\'s chapeau',
-		Legs = 'Warlock\'s Tights', 
-		Neck = 'Enhancing Torque',
-		Waist = 'Swift Belt',
-		Hands = '',
 	},
 	
-	    Stun_Precast = {
-		Main = 'Thunder Staff',
-		Legs = '', 
-		Neck = '',
-		Waist = '',
-		Hands = '',
+	Stun_Precast = {
 	},
 	
 	
@@ -258,46 +203,31 @@ local sets = {
 	--Obis will automatically equip for nukes if you have them in the right weather/day.
 	--Healing sets
     Cure = {
-		Head = 'Errant Hat',
-		Body = 'Errant Hpl.',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Hands = 'Devotee\'s Mitts',
-        Ring1 = 'Aqua Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Penitent\'s Rope',
-        Legs = 'Warlock\'s Tights',    
-        Feet = 'Mahatma Pigaches',
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
+		Back = 'White Cape +1',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
     Self_Cure = {
-		Head = 'Errant Hat',
-		Body = 'Errant Hpl.',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Hands = 'Devotee\'s Mitts',
-        Ring1 = 'Aqua Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Penitent\'s Rope',
-        Legs = 'Warlock\'s Tights',    
-        Feet = 'Mahatma Pigaches', 
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
+		Back = 'White Cape +1',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
 	Cure_HighMP = {
-		Head = 'Errant Hat',
-		Body = 'Errant Hpl.',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Hands = 'Devotee\'s Mitts',
-        Ring1 = 'Aqua Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Penitent\'s Rope',
-        Legs = 'Warlock\'s Tights',    
-        Feet = 'Mahatma Pigaches',	
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Astral Ring',
+        Ring2 = 'Astral Ring',
+		Back = 'White Cape +1',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
 	
 	
@@ -306,104 +236,73 @@ local sets = {
 
 	--Enhancing sets
     Enhancing = {
-			
-		Body = 'Glamor Jupon',
-		Legs = 'Warlock\'s Tights', 
-		Neck = 'Enhancing Torque',
 	},
     Self_Enhancing = {
-		Body = 'Glamor Jupon',
-		Legs = 'Warlock\'s Tights', 
-		Neck = 'Enhancing Torque',
 	},
 	Enhancing_HighMP = {
-		Body = 'Glamor Jupon',
-		Legs = 'Warlock\'s Tights', 
-		Neck = 'Enhancing Torque',	
 	},
     Stoneskin = {
-		Ammo = 'Phtm. Tathlum',
-		Body = 'Glamor Jupon',
-		Neck = 'Enhancing Torque',
-		Ear1 = 'Geist Earring',
-		Ear2 = 'Geist Earring',
+		Head = 'Traveler\'s Hat',
 		Hands = 'Devotee\'s Mitts',
-		Ring1 = 'Aqua Ring',
-		Ring2 = 'Tamas Ring',
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
 		Back = 'White Cape +1',
-		Waist = 'Penitent\'s Rope',
-		Legs = 'Warlock\'s Tights',  
-		Feet = 'Mahatma Pigaches',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
     Phalanx = {
-		Body = 'Glamor Jupon',
-		Legs = 'Warlock\'s Tights', 
-		Neck = 'Enhancing Torque',
 	},
-    Refresh = {
-        Neck = 'Holy Phial',
-        Body = 'Warlock\'s Tabard',		
+    Refresh = {	
 	},
-	
-    Refresh_HighMP = {
-        Neck = 'Holy Phial',
-        Body = 'Warlock\'s Tabard',		
+    Refresh_HighMP = {	
 	},	
-	
-    Self_Refresh = {
-        Neck = 'Holy Phial',
-        Body = 'Warlock\'s Tabard',		
+    Self_Refresh = {	
 	},
 
 	--Enfeebling sets
     Enfeebling = {
-		Head = 'Wise Cap',
-		Body = 'Warlock\'s Tabard',
-		Neck = 'Enfeebling Torque',
-		Legs = 'Wise Braconi',
-		Feet = 'Wise Pigaches',
 	},
-	Enfeebling_HighMP = {
-		Head = 'Wise Cap',
-		Body = 'Warlock\'s Tabard',
-		Neck = 'Enfeebling Torque',	
-		Legs = 'Wise Braconi',
-		Feet = 'Wise Pigaches',		
+	Enfeebling_HighMP = {	
 	},
 	
 	
 	
 	DebuffMND = {
-		Ammo = 'Phtm. Tathlum',
-		Head = 'Errant Hat',
-		Body = 'Warlock\'s Tabard',
-		Neck = 'Enfeebling Torque',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Hands = 'Devotee\'s Mitts',
-        Ring1 = 'Aqua Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Penitent\'s Rope',
-        Legs = 'Errant Slops',  
-        Feet = 'Mahatma Pigaches',
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Saintly Ring',
+        Ring2 = 'Saintly Ring',
+		Back = 'White Cape',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
+	},
+	DebuffMND_HighMP = {
+		Head = 'Traveler\'s Hat',
+		Hands = 'Devotee\'s Mitts',
+        Ring1 = 'Astral Ring',
+        Ring2 = 'Astral Ring',
+		Back = 'White Cape',
+		Legs = 'Custom Slacks',
+		Feet = 'Cotton Gaiters',
 	},
 	
-	
 	DebuffINT = {
-		Ammo = 'Phtm. Tathlum',
-		Body = 'Warlock\'s Tabard',
-        Head = 'Warlock\'s chapeau',
-        Neck = 'Enfeebling Torque',
-        Ear1 = 'Abyssal Earring',
-        Ear2 = 'Morion Earring',
-        Hands = 'Errant Cuffs',
-        Ring1 = 'Snow Ring',
-        Ring2 = 'Tamas Ring',
+		Head = 'Baron\'s Chapeau',
+		Hands = 'Custom M Gloves',
+        Ring1 = 'Eremite\'s Ring',
+        Ring2 = 'Eremite\'s Ring',
 		Back = 'Black Cape +1',
-        Waist = 'Penitent\'s Rope',
-        Legs = 'Errant Slops',  
-		Feet = 'Wise Pigaches',	
+		Legs = 'Custom Slacks',
+		Feet = 'Custom M Boots',
+	},
+	DebuffINT_HighMP = {
+		Head = 'Baron\'s Chapeau',
+		Hands = 'Custom M Gloves',
+        Ring1 = 'Astral Ring',
+        Ring2 = 'Astral Ring',
+		Back = 'Black Cape +1',
+		Legs = 'Custom Slacks',
+		Feet = 'Custom M Boots',
 	},
 	
 	
@@ -411,60 +310,35 @@ local sets = {
 
 	--Dark sets
 	DarkMagic = {
-        body = 'Glamor Jupon',	
 	},
 	DarkMagic_HighMP={
-	body = 'Glamor Jupon',	
 	},
 	Stun = {
-        Main = 'Thunder Staff',
-		body = 'Glamor Jupon',	
-		Head = 'Wise Cap',
-		Ring2 = 'Tamas Ring',
-		Feet = 'Wise Pigaches',
 	},	
     Drain = {
-		Head = 'Wise Cap',
-		body = 'Glamor Jupon',
-		waist = 'Swift Belt',
-		Hands = '',
-		Legs = 'Wise Braconi',
-		Feet = 'Wise Pigaches',
 	},
 
 	--Nuking sets
     Nuke = {
-		Ammo = 'Phtm. Tathlum',
-		Body = 'Errant Hpl.',
-        Head = 'Warlock\'s chapeau',
-        Neck = 'Elemental Torque',
-        Ear1 = 'Abyssal Earring',
-        Ear2 = 'Moldavite Earring',
-        Hands = 'Errant Cuffs',
-        Ring1 = 'Snow Ring',
-        Ring2 = 'Tamas Ring',
-        Waist = 'Penitent\'s Rope',
+		Head = 'Baron\'s Chapeau',
+		Hands = 'Custom M Gloves',
+        Ring1 = 'Eremite\'s Ring',
+        Ring2 = 'Eremite\'s Ring',
 		Back = 'Black Cape +1',
-        Legs = 'Errant Slops',  
-		Feet = 'Wise Pigaches',	
+		Legs = 'Custom Slacks',
+		Feet = 'Custom M Boots',
 	},
     NukeACC = {
 		Neck = 'Elemental Torque',
 	},
 	Nuke_HighMP = {
-		Ammo = 'Phtm. Tathlum',
-		Body = 'Errant Hpl.',
-        Head = 'Warlock\'s chapeau',
-        Neck = 'Elemental Torque',
-        Ear1 = 'Abyssal Earring',
-        Ear2 = 'Moldavite Earring',
-        Hands = 'Errant Cuffs',
-        Ring1 = 'Snow Ring',
-        Ring2 = 'Tamas Ring',
-        Waist = 'Penitent\'s Rope',
+		Head = 'Baron\'s Chapeau',
+		Hands = 'Custom M Gloves',
+        Ring1 = 'Astral Ring',
+        Ring2 = 'Astral Ring',
 		Back = 'Black Cape +1',
-        Legs = 'Errant Slops',  
-		Feet = 'Wise Pigaches',	
+		Legs = 'Custom Slacks',
+		Feet = 'Custom M Boots',
 	},
     Burst = {},
 	Divine = {},
@@ -477,46 +351,13 @@ local sets = {
 
 --Weaponskill sets
     Ws_Default = {
-		Head = 'Optical Hat',
-		Body = 'Cerise Doublet',		
-		Neck = 'Spike Necklace',
-		Hands = 'Ogre Gloves',
-		ring1 = 'Aqua Ring',
-		ring2 = 'Courage Ring',
-		Waist = 'Brave Belt',
-		Ear1 = 'Bone Earring +1',
-		Ear2 = 'Bone Earring +1',
-		Back = 'Amemet Mantle',	
 	},
-	
 	Ws_Acc = {},
 	Ws_Elemental = {
-		Head = 'Optical Hat',
-		Body = 'Cerise Doublet',
-		Hands = 'Devotee\'s Mitts',
-		Legs = 'Warlock\'s Tights',
-		Feet = 'Mahatma pigaches',
-		Neck = 'Peacock amulet',
-		ring1 = 'Tamas Ring',
-		ring2 = 'Aqua Ring',
-		Waist = 'Penitent\'s rope',
-		Ear1 = 'Geist Earring',
-		Ear2 = 'Moldavite Earring',
-		Back = 'White cape +1'
 	},
 	Ws_Hybrid = {},
 		
 	Vorpal_Blade = {
-		Head = 'Optical Hat',
-		Body = 'Cerise Doublet',		
-		Neck = 'Spike Necklace',
-		Hands = 'Ogre Gloves',
-		ring1 = 'Aqua Ring',
-		ring2 = 'Courage Ring',
-		Waist = 'Brave Belt',
-		Ear1 = 'Bone Earring +1',
-		Ear2 = 'Bone Earring +1',
-		Back = 'Amemet Mantle',
 	},
 	
 	
@@ -526,12 +367,6 @@ local sets = {
 --Ability sets
 	CS = {}, --Used during activation.
 	Chainspell = { --Locked to this set while Chainspell is active.
-        Main = 'Thunder Staff',
-		body = 'Glamor Jupon',	
-		Head = 'Wise Cap',
-		Ring2 = 'Tamas Ring',
-		Legs = 'Wise Braconi',
-		Feet = 'Wise Pigaches',
 	},
 
 --Other sets
@@ -569,23 +404,6 @@ local sets = {
         -- Legs = 'Remove',
         -- Feet = 'Remove',
 	},
-	
-    ['export'] = {
-        Main = 'Terra\'s Staff',
-        Ammo = 'Phtm. Tathlum',
-        Head = 'Warlock\'s Chapeau',
-        Neck = 'Holy Phial',
-        Ear1 = 'Geist Earring',
-        Ear2 = 'Geist Earring',
-        Body = 'Warlock\'s Tabard',
-        Hands = 'Devotee\'s Mitts',
-        Ring1 = 'Aqua Ring',
-        Ring2 = 'Tamas Ring',
-        Back = 'White Cape +1',
-        Waist = 'Penitent\'s Rope',
-        Legs = 'Warlock\'s Tights',
-        Feet = 'San d\'Orian Clogs',
-    },
 };
 profile.Sets = sets;
 
@@ -605,7 +423,7 @@ local Settings = {
 	LockstyleSet = 2; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
 	
 	Macros = true; -- set to true for macro book and macro set changes on load/sj change.
-	MacroBook = 1; -- The macro book you want for this job. Otherwise set to false.
+	MacroBook = 5; -- The macro book you want for this job. Otherwise set to false.
 	MacroSets = { --  ['SubJob'] = MacroSet# (set to 0 for no change). DO NOT change the numbers in the [].
 		[1] = 0, --WAR
 		[2] = 0, --MNK
@@ -639,7 +457,12 @@ local function MCHighMPTrue()
     local me = AshitaCore:GetMemoryManager():GetParty():GetMemberName(0);
 
 	if (spell.Skill == 'Enfeebling Magic') then
-		gFunc.EquipSet(sets.Enfeebling_HighMP)
+		gFunc.EquipSet(sets.Enfeebling_HighMP)		
+		if (MndDebuffs:contains(spell.Name)) then
+			gFunc.EquipSet(sets.DebuffMND);
+		else
+			gFunc.EquipSet(sets.DebuffINT);
+		end
 		if (blinclude.GetCycle('Weapon') == 'Default') then 
 			gFunc.Equip('main', blsets.ElementalStaffTable[spell.Element]);
 		end;
@@ -863,53 +686,12 @@ profile.OnLoad = function()
 	gSettings.AllowAddSet = true;
 	
     blinclude.Initialize();
-
 	SetLockstyle:once(2);
 	SetMacros:once(3);
-	
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F1 /idleset');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F2 /xpring');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F12 /meleeset');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F11 /fight');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');
-    AshitaCore:GetChatManager():QueueCommand(-1, '/bind !R /ma "Refresh" <stal> ;/echo |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Refresh ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !Y /ma "Phalanx" <me> ;/echo |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Phalanx ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !Q /ma "Regen" <stal> ;/echo |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Regen ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !E /ma "Haste" <stal> ;/echo |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Haste ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !S /ma "Sleep II" <stnpc> ;/echo ----------------------------------------------------  Sleep 2');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !D /ma "Dispel" <stnpc> ;/echo ----------------------------------------------------  Dispel');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !G /ma "Gravity" <stnpc> ;/echo ----------------------------------------------------  Gravity');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind !B /ma "Bind" <stnpc> ;/echo ----------------------------------------------------  Bind');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind @B /ma "Blink" <me> ;/echo |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Blink ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind @S /ma "Stoneskin" <me> ;/echo |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Stoneskin ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^A /ma "Aquaveil" <me> ;/echo ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Aquaveil ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^V /ma "Viruna" <stal> ;/echo ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Viruna ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^D /ma "Dia" <t> ;/echo ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Dia ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^- /ma "Utsusemi: Ichi" <me> ;/echo ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Ichi ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^= /ma "Utsusemi: Ni" <me> ;/echo ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Ni ');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind @1 /equipset 12 ;/echo  Sword and Shield ');
 end
 
 profile.OnUnload = function()
     blinclude.Unload();
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^G');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F1');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F11');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F12');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !R');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !Y');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !Q');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !E');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !S');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !D');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !G');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind !B');   
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind @B');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind @S');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^A');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^D');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^V');
-	AshitaCore:GetChatManager():QueueCommand(-1, '/unbind @1');
 end
 
 profile.HandleCommand = function(args)
@@ -932,7 +714,7 @@ profile.HandleDefault = function()
 	if (player.Status ~= 'Resting') then
 		if (blinclude.GetCycle('Weapon') ~= 'Default') and (player.Status ~= 'Resting') then 
 			gFunc.EquipSet('Weapon_' .. blinclude.GetCycle('Weapon'))
-		elseif (blinclude.GetToggle('HighMP') == true) and (mpp >= 85) then
+		elseif (blinclude.GetToggle('HighMP') == true) and (mpp >= Settings.HighMPP) then
 			gFunc.EquipSet(sets.Weapon_Default_HighMP)
 		else
 			gFunc.EquipSet(sets.Weapon_Default)
@@ -949,9 +731,17 @@ profile.HandleDefault = function()
 			end
 			if (blinclude.GetCycle('TH') ~= 'none') then
 				if (blinclude.GetCycle('TH') == 'Tag') then 
-				--if (not isTargetTagged()) then
+				if (not isTargetTagged()) then
 					gFunc.EquipSet(sets.TH);
-				--end
+				end
+				
+				-- if conquest:GetInsideControl() then
+					-- --if inside nation controlled region
+				-- end
+				-- if conquest:GetOutsideControl() then
+					-- --if outside nation controlled region
+				-- end
+		
 				elseif (blinclude.GetCycle('TH') == 'Fulltime') then
 					gFunc.EquipSet(sets.TH);
 				end
@@ -969,7 +759,14 @@ profile.HandleDefault = function()
 			if (blinclude.GetCycle('TpSet') ~= 'Default') then 
 				gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 			end
-			
+		
+			-- if conquest:GetInsideControl() then
+				-- --if inside nation controlled region
+			-- end
+			-- if conquest:GetOutsideControl() then
+				-- --if outside nation controlled region
+			-- end
+		
 			if (blinclude.GetCycle('TH') ~= 'none') then
 				if (blinclude.GetCycle('TH') == 'Tag') then 
 					if (not isTargetTagged()) then

@@ -1,5 +1,5 @@
 --[[
-	BasicLuas Ver. 18.5
+	BasicLuas Ver. 18.6
 	By Aesk (with much help from the Ashita discord members)
 ]]--
 
@@ -8,6 +8,7 @@ local profile = {};
 blinclude = gFunc.LoadFile('common\\blinclude.lua');
 local rangedTable = gFunc.LoadFile('common\\rangedtypes.lua');
 local isTargetTagged = gFunc.LoadFile('common\\isTargetTagged.lua');
+local conquest = gFunc.LoadFile('common\\conquest.lua');
 
 --If you change the names here, Make sure to change the weapon/ammo sets below to match.
 	--DO NOT CHANGE 'Default'
@@ -118,24 +119,28 @@ local sets = {
 		--Ammo = 'Wooden Arrow'
 	},
 	
-	Ammo_NoRanged_Priority = {
+	Ammo_NoRanged_Tp = {
 		Range = '',
-		Ammo = { 'Bomb Core', 'Balm Sachet' }
+		Ammo = 'Tiphia Sting',
+	},
+	Ammo_NoRanged_Ws = {
+		Range = '',
+		Ammo = 'Bomb Core',
 	},
 
 --Idle sets
     Idle_Default_Priority = {--If you want to idle with a weapon, put the weapon in Weapon_Default above.
 		Head = { 'Genbu\'s Kabuto','Optical Hat', 'Celata', 'Fighter\'s Mask', 'Centurion\'s Visor' },
         Neck = { 'Fortitude Torque', 'Peacock Amulet', 'Spike Necklace' },
-        Ear1 = { 'Bushinomimi', 'Coral Earring','Beetle Earring +1' },
-        Ear2 = { 'Coral Earring','Beetle Earring +1' },
+        Ear1 = { 'Bushinomimi', 'Merman\'s Earring','Beetle Earring +1' },
+        Ear2 = { 'Brutal Earring','Merman\'s Earring','Beetle Earring +1' },
         Body = { 'Kirin\'s Osode', 'Haubergeon', 'Ryl.Kgt. Chainmail', 'Brigandine', 'Ryl.Sqr. Chainmail', 'Ctr. Scale Mail' },
         Hands = { 'Seiryu\'s Kote', 'Thick Mufflers', 'Fighter\'s Mufflers', 'Custom M Gloves' },
         Ring1 = { 'Rajas Ring', 'Balance Ring' },
 		Ring2 = { 'Sniper\'s Ring', 'Bastokan Ring' },
         Back = { 'Amemet Mantle +1', 'Rabbit Mantle' },
         Waist = { 'Warwolf Belt','Warrior\'s Belt +1' },
-        Legs = { 'Byakko\'s Haidate', 'Ryl.Kgt. Breeches', 'Republic Subligar' },
+        Legs = { 'Byakko\'s Haidate','Barone Cosciales', 'Ryl.Kgt. Breeches', 'Republic Subligar' },
         Feet = { 'Suzaku\'s Sune-Ate', 'Fighter\'s Calligae','Irn.Msk. Sabatons', 'Ctr. Greaves' },
     },
     Resting_Priority = {--If you use a weapon for resting, put the weapon in Weapon_Resting.
@@ -150,7 +155,7 @@ local sets = {
         Head = 'Genbu\'s Kabuto',
         Neck = 'Fortitude Torque',
         Ear1 = 'Bushinomimi',
-        Ear2 = 'Coral Earring',
+        Ear2 = 'Brutal Earring',
         Body = 'Kirin\'s Osode',
         Hands = 'Seiryu\'s Kote',
         Ring1 = 'Rajas Ring',
@@ -166,27 +171,46 @@ local sets = {
 		
 		Head = { 'Optical Hat', 'Celata', 'Fighter\'s Mask', 'Centurion\'s Visor' },
         Neck = { 'Fortitude Torque','Peacock Amulet', 'Spike Necklace' },
-        Ear1 = { 'Bushinomimi', 'Coral Earring', 'Beetle Earring +1' },
-        Ear2 = { 'Coral Earring','Beetle Earring +1' },
+        Ear1 = { 'Bushinomimi', 'Merman\'s Earring', 'Beetle Earring +1' },
+        Ear2 = { 'Brutal Earring','Merman\'s Earring','Beetle Earring +1' },
         Body = { 'Haubergeon', 'Ryl.Kgt. Chainmail', 'Brigandine', 'Ryl.Sqr. Chainmail', 'Ctr. Scale Mail' },
         Hands = { 'Dusk Gloves', 'Thick Mufflers', 'Custom M Gloves' },
         Ring1 = { 'Rajas Ring', 'Balance Ring' },
 		Ring2 = { 'Sniper\'s Ring', 'Balance Ring' },
         Back = { 'Amemet Mantle +1', 'Rabbit Mantle' },
         Waist = { 'Swift Belt','Life Belt', 'Tilt Belt', 'Brave Belt' },
-        Legs = { 'Byakko\'s Haidate', 'Fighter\'s Cuisses', 'Republic Subligar' },
-        Feet = { 'Fighter\'s Calligae','Irn.Msk. Sabatons', 'Ctr. Greaves' },
+        Legs = { 'Byakko\'s Haidate','Barone Cosciales', 'Fighter\'s Cuisses', 'Republic Subligar' },
+        Feet = { 'Dusk Ledelsens','Fighter\'s Calligae','Irn.Msk. Sabatons', 'Ctr. Greaves' },
     },
 	Tp_Acc_Priority = {
-		Neck = 'Peacock Amulet',
-		Waist = 'Warrior\'s Stone',
+		Neck = {'Peacock Amulet'},
+		Waist = {'Warrior\'s Stone'},
 	},
 	Tp_Def_Priority = {
-		Head = 'Genbu\'s Kabuto',
-		Body = 'Kirin\'s Osode',
-		Feet = 'Suzaku\'s Sune-Ate',
+		Head = {'Genbu\'s Kabuto'},
+		Body = {'Kirin\'s Osode'},
+		Feet = {'Suzaku\'s Sune-Ate'},
 	},
-	Tp_Eva_Priority = {},
+	Tp_Eva_Priority = {
+		Body = {'Scp. Harness +1'},
+	},
+	
+	Tp_Great_Axe_Priority = {
+		Neck = { 'Fortitude Torque','Peacock Amulet', 'Spike Necklace' },
+		Ear1 = { 'Bushinomimi', 'Merman\'s Earring', 'Beetle Earring +1' },
+	},
+	Tp_Polearm = {
+		Neck = { 'Peacock Amulet', 'Spike Necklace' },
+		Ear1 = { 'Merman\'s Earring', 'Beetle Earring +1' },
+	},
+	Tp_Axe_Axe = {
+		Neck = { 'Peacock Amulet', 'Spike Necklace' },
+		Ear1 = { 'Merman\'s Earring', 'Beetle Earring +1' },
+	},
+	Tp_Axe_Sword = {
+		Neck = { 'Peacock Amulet', 'Spike Necklace' },
+		Ear1 = { 'Merman\'s Earring', 'Beetle Earring +1' },
+	},
 
 --Precast sets (Fast Cast + Casting time reduction)
 	--Put your total Fast Cast in the settings below.
@@ -218,16 +242,16 @@ local sets = {
     Ws_Default_Priority = {
         Head = {'Optical Hat'},
         Neck = {'Peacock Amulet'},
-        Ear1 = {'Bushinomimi'},
-        Ear2 = {'Coral Earring'},
+        Ear1 = {'Bushinomimi','Merman\'s Earring'},
+        Ear2 = {'Brutal Earring','Merman\'s Earring'},
         Body = {'Hecatomb Harness', 'Haubergeon'},
-        Hands = {'Warrior\'s Mufflers','Thick Mufflers'},
+        Hands = {'Warrior\'s Mufflers','Thick Mufflers','Fighter\'s Mufflers',},
         Ring1 = {'Rajas Ring'},
         Ring2 = {'Sniper\'s Ring'},
         Back =  {'Amemet Mantle +1'},
         Waist = { 'Warwolf Belt', 'Life Belt' },
-        Legs = {'Byakko\'s Haidate'},
-		Feet = {'Hct. Leggings'}
+        Legs = {'Byakko\'s Haidate','Barone Cosciales'},
+		Feet = {'Hct. Leggings','Fighter\'s Calligae'}
 	},
 	Ws_Acc_Priority = {
 		Waist = 'Warrior\'s Stone',
@@ -261,6 +285,7 @@ local sets = {
 		Waist = 'Warrior\'s Stone',
 	},
 	Decimation_Priority = {--STR:50% 3-hit Acc Flame/Light/Aqua
+		Neck = 'Light Gorget',
 		Waist = 'Warrior\'s Stone',
 		Ring2 = 'Flame Ring',
 	},
@@ -341,7 +366,7 @@ local sets = {
         -- Back = 'Remove',
         -- Waist = 'Remove',
         -- Legs = 'Remove',
-        -- Feet = 'Remove',
+        Feet = 'Dusk Ledelsens',
 	},
 
 };
@@ -358,7 +383,7 @@ local Settings = {
 	Snapshot = (0 + 0); -- Your total Snapshot (Traits + Gear in preshot)
 	
 	Lockstyle = true; -- set to true for lockstyle on load/sj change. Otherwise set to false.
-	LockstyleSet = 0; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
+	LockstyleSet = 4; -- Your chosen lockstyleset or set to 0 for just '/lockstyle on'.
 	
 	Macros = true; -- set to true for macro book and macro set changes on load/sj change.
 	MacroBook = 1; -- The macro book you want for this job. Otherwise set to false.
@@ -524,7 +549,7 @@ profile.HandleDefault = function()
 		CreateAmmoCycle();
 		gFunc.EquipSet(sets.Ammo_Arrow)
 	elseif (equip.Range == nil) and (blinclude.GetCycle('Ammo') == 'Default') then
-		gFunc.EquipSet(sets.Ammo_NoRanged);
+		gFunc.EquipSet(sets.Ammo_NoRanged_Tp);
 	else
 		CreateAmmoCycle();
 	end
@@ -536,6 +561,16 @@ profile.HandleDefault = function()
 		if (blinclude.GetCycle('TpSet') ~= 'Default') then 
 			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('TpSet'))
 		end
+		if (blinclude.GetCycle('Weapon') ~= 'Default') then 
+			gFunc.EquipSet('Tp_' .. blinclude.GetCycle('Weapon'))
+		end
+		
+		-- if conquest:GetInsideControl() then
+			-- --if inside nation controlled region
+		-- end
+		-- if conquest:GetOutsideControl() then
+			-- --if outside nation controlled region
+		-- end
 		
 		if (blinclude.GetCycle('TH') ~= 'none') then
 			if (blinclude.GetCycle('TH') == 'Tag') then 
@@ -678,6 +713,7 @@ profile.HandleWeaponskill = function()
 		return;
     else
 		local player = gData.GetPlayer();
+		local equip = gData.GetEquipment();
 		local ws = gData.GetAction();
 		local weather = gData.GetEnvironment();
         local sa = gData.GetBuffCount('Sneak Attack');
@@ -691,7 +727,9 @@ profile.HandleWeaponskill = function()
         if (sa >= 1) then
             gFunc.EquipSet(sets.Ws_Default_SA);
         end
-    
+		if not (equip.Range) then
+			gFunc.EquipSet(sets.Ammo_NoRanged_Ws);
+		end
         if string.match(ws.Name, 'Penta Thrust') then
             gFunc.EquipSet(sets.Penta_Thrust)
         elseif string.match(ws.Name, 'Impulse Drive') then
